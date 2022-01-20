@@ -93,7 +93,7 @@ def train(args, exp, model, optimizer, scheduler, criterion, loader,
                                            step_size=args.step_size,
                                            attacks=args.attack_choice,
                                            exp_stats=exp_stats)
-        acc = exp_stats['adv_eval_acc']
+        acc = exp_stats['adv_val_acc']
 
         if acc > best_acc:
             is_best = True
