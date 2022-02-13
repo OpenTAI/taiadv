@@ -18,7 +18,7 @@ a part of the [OpenTAI](https://github.com/OpenTAI) project.
 - **models:** implementations for commonly used models
 - **training** implementations of training pipeline
 
-See [examples](https://github.com/OpenTAI/taiadv/tree/main/examples) for using our training pipeline with other modules to train a robust model. You can also find examples for attack/defense examples as well. 
+See [examples](https://github.com/OpenTAI/taiadv/tree/main/examples) for using our training pipeline with other modules to train a robust model. You can also find examples for attack/defense as well. 
 
 ## Contributing to TAIAdv
 
