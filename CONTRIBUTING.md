@@ -23,5 +23,3 @@ If you plan to add some new features that involve large changes, it is encourage
 
 We adopt [PEP8](https://www.python.org/dev/peps/pep-0008/) as the preferred code style.
 
-After you clone the repository, you will need to install initialize pre-commit hook.
-
