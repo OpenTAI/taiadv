@@ -5,13 +5,15 @@ from torch.autograd import Variable
 
 
 class StandardAT(nn.Module):
-    def __init__(self, step_size=0.007, epsilon=0.031, perturb_steps=10,
+
+    def __init__(self,
+                 step_size=0.007,
+                 epsilon=0.031,
+                 perturb_steps=10,
                  distance='l_inf'):
-        """
-            Implementation of standard adversarial training (SAT) based on
-            "Towards Deep Learning Models Resistant to Adversarial Attacks" in
-            ICLR 2018.
-        """
+        """Implementation of standard adversarial training (SAT) based on
+        "Towards Deep Learning Models Resistant to Adversarial Attacks" in ICLR
+        2018."""
 
         super(StandardAT, self).__init__()
         self.step_size = step_size
@@ -34,8 +36,9 @@ class StandardAT(nn.Module):
                 grad = torch.autograd.grad(loss_ce, [x_adv])[0]
                 grad_sign = torch.sign(grad.detach())
                 x_adv = x_adv.detach() + self.step_size * grad_sign
-                x_adv = torch.min(torch.max(x_adv, images - self.epsilon),
-                                  images + self.epsilon)
+                x_adv = torch.min(
+                    torch.max(x_adv, images - self.epsilon),
+                    images + self.epsilon)
                 x_adv = torch.clamp(x_adv, 0.0, 1.0)
         else:
             # only support L_inf for now.

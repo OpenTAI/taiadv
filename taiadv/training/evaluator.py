@@ -1,8 +1,10 @@
-import torch
 import time
-import torch.optim as optim
+
+import torch
 import torch.nn.functional as F
+import torch.optim as optim
 from torch.autograd import Variable
+
 from . import util
 
 if torch.cuda.is_available():
@@ -12,6 +14,7 @@ else:
 
 
 class Evaluator():
+
     def __init__(self, criterion, data_loader, logger):
         self.loader = data_loader
         self.logger = logger
@@ -31,10 +34,10 @@ class Evaluator():
         for i, (images, labels) in enumerate(self.loader):
             self.eval_batch(images=images, labels=labels, model=model)
         payload = 'Val Loss: %.2f' % self.loss_meters.avg
-        self.logger.info('\033[33m'+payload+'\033[0m')
+        self.logger.info('\033[33m' + payload + '\033[0m')
         exp_stats['val_loss'] = self.loss_meters.avg
         payload = 'Val Acc: %.4f' % (self.acc_meters.avg * 100)
-        self.logger.info('\033[33m'+payload+'\033[0m')
+        self.logger.info('\033[33m' + payload + '\033[0m')
         exp_stats['val_acc'] = self.acc_meters.avg
         return exp_stats
 
@@ -53,8 +56,13 @@ class Evaluator():
         self.acc5_meters.update(acc5.item(), labels.shape[0])
         return correct, loss
 
-    def adv_whitebox(self, model, epsilon=8/255, num_steps=20,
-                     step_size=0.8/255, attacks='PGD', exp_stats={}):
+    def adv_whitebox(self,
+                     model,
+                     epsilon=8 / 255,
+                     num_steps=20,
+                     step_size=0.8 / 255,
+                     attacks='PGD',
+                     exp_stats={}):
         model.eval()
         clean_correct, clean_loss, total = 0, 0, 0
         adv_correct, adv_loss, stable = 0, 0, 0
@@ -65,11 +73,15 @@ class Evaluator():
             labels = labels.to(device, non_blocking=True)
             correct, loss = self.eval_batch(images, labels, model)
             if attacks == 'PGD':
-                rs = self._pgd_whitebox(model, images, labels, epsilon=epsilon,
-                                        num_steps=num_steps,
-                                        step_size=step_size)
+                rs = self._pgd_whitebox(
+                    model,
+                    images,
+                    labels,
+                    epsilon=epsilon,
+                    num_steps=num_steps,
+                    step_size=step_size)
             else:
-                raise('Unknown Attack')
+                raise ('Unknown Attack')
             acc, acc_pgd, attack_loss, stable_count, _, = rs
             batch_size = images.shape[0]
             total += batch_size
@@ -82,34 +94,40 @@ class Evaluator():
         end = time.time()
         time_used = end - start
 
-        rs = clean_loss/total, clean_correct, clean_correct/total * 100
-        adv_rs = adv_loss/total, adv_correct, adv_correct/total * 100
-        adv_stats = stable, stable/total * 100
+        rs = clean_loss / total, clean_correct, clean_correct / total * 100
+        adv_rs = adv_loss / total, adv_correct, adv_correct / total * 100
+        adv_stats = stable, stable / total * 100
         payload = 'Eval Loss: %.4f Eval Correct: %d Eval Acc: %.4f' % rs
-        self.logger.info('\033[33m'+payload+'\033[0m')
+        self.logger.info('\033[33m' + payload + '\033[0m')
         payload = 'Adv Loss: %.4f Adv Correct: %d Adv Acc: %.4f' % adv_rs
-        self.logger.info('\033[33m'+payload+'\033[0m')
+        self.logger.info('\033[33m' + payload + '\033[0m')
         payload = 'Adv Stable Count: %d Adv Stable: %.4f' % adv_stats
-        self.logger.info('\033[33m'+payload+'\033[0m')
+        self.logger.info('\033[33m' + payload + '\033[0m')
         payload = 'Time Cost: %.4f' % time_used
-        self.logger.info('\033[33m'+payload+'\033[0m')
+        self.logger.info('\033[33m' + payload + '\033[0m')
         exp_stats['clean_val_acc'] = clean_correct / total * 100
         exp_stats['clean_val_loss'] = clean_loss / total
         exp_stats['adv_val_acc'] = adv_correct / total * 100
         exp_stats['adv_val_loss'] = adv_loss / total
         exp_stats['adv_val_stable'] = stable
-        exp_stats['adv_val_stable_precentage'] = stable/total * 100
+        exp_stats['adv_val_stable_precentage'] = stable / total * 100
         return exp_stats
 
-    def _pgd_whitebox(self, model, X, y, random_start=True,
-                      epsilon=0.031, num_steps=20, step_size=0.003):
+    def _pgd_whitebox(self,
+                      model,
+                      X,
+                      y,
+                      random_start=True,
+                      epsilon=0.031,
+                      num_steps=20,
+                      step_size=0.003):
         model.eval()
         out = model(X)
         acc = (out.data.max(1)[1] == y.data).float().sum()
         X_pgd = Variable(X.data, requires_grad=True)
         if random_start:
-            random_noise = torch.FloatTensor(
-                *X_pgd.shape).uniform_(-epsilon, epsilon).to(device)
+            random_noise = torch.FloatTensor(*X_pgd.shape).uniform_(
+                -epsilon, epsilon).to(device)
             X_pgd = Variable(X_pgd.data + random_noise, requires_grad=True)
 
         for _ in range(num_steps):

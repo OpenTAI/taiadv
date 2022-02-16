@@ -1,5 +1,6 @@
 import logging
 import os
+
 import numpy as np
 import torch
 
@@ -10,7 +11,7 @@ else:
 
 
 def setup_logger(name, log_file, level=logging.INFO):
-    """To setup as many loggers as you want"""
+    """To setup as many loggers as you want."""
     formatter = logging.Formatter('%(asctime)s %(message)s')
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
@@ -35,7 +36,7 @@ def log_display(epoch, global_step, time_elapse, **kwargs):
     return display
 
 
-def accuracy(output, target, topk=(1,)):
+def accuracy(output, target, topk=(1, )):
     maxk = max(topk)
 
     batch_size = target.size(0)
@@ -46,7 +47,7 @@ def accuracy(output, target, topk=(1,)):
     res = []
     for k in topk:
         correct_k = correct[:k].float().sum()
-        res.append(correct_k.mul_(1/batch_size))
+        res.append(correct_k.mul_(1 / batch_size))
     return res
 
 
@@ -61,7 +62,7 @@ def build_dirs(path):
 
 
 class AverageMeter(object):
-    """Computes and stores the average and current value"""
+    """Computes and stores the average and current value."""
 
     def __init__(self):
         self.reset()

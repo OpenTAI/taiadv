@@ -1,20 +1,32 @@
 import math
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 
 class BasicBlock(nn.Module):
+
     def __init__(self, in_planes, out_planes, stride, drop_rate=0.0):
         super(BasicBlock, self).__init__()
         self.bn1 = nn.BatchNorm2d(in_planes)
         self.relu1 = nn.ReLU(inplace=True)
-        self.conv1 = nn.Conv2d(in_planes, out_planes, kernel_size=3,
-                               stride=stride, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(
+            in_planes,
+            out_planes,
+            kernel_size=3,
+            stride=stride,
+            padding=1,
+            bias=False)
         self.bn2 = nn.BatchNorm2d(out_planes)
         self.relu2 = nn.ReLU(inplace=True)
-        self.conv2 = nn.Conv2d(out_planes, out_planes, kernel_size=3, stride=1,
-                               padding=1, bias=False)
+        self.conv2 = nn.Conv2d(
+            out_planes,
+            out_planes,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+            bias=False)
         self.drop_rate = drop_rate
         self.equalInOut = (in_planes == out_planes)
         self.convShortcut = (not self.equalInOut or stride == 2) and \
@@ -37,23 +49,30 @@ class BasicBlock(nn.Module):
 
 
 class NetworkBlock(nn.Module):
-    def __init__(self, nb_layers, in_planes, out_planes, stride, drop_rate=0.0,
+
+    def __init__(self,
+                 nb_layers,
+                 in_planes,
+                 out_planes,
+                 stride,
+                 drop_rate=0.0,
                  block_type='basic_block'):
         super(NetworkBlock, self).__init__()
         if block_type == 'basic_block':
             block = BasicBlock
         else:
-            raise('Unknown block: %s' % (block_type))
+            raise ('Unknown block: %s' % (block_type))
 
-        self.layer = self._make_layer(
-            block, in_planes, out_planes, nb_layers, stride, drop_rate)
+        self.layer = self._make_layer(block, in_planes, out_planes, nb_layers,
+                                      stride, drop_rate)
 
     def _make_layer(self, block, in_planes, out_planes, nb_layers, stride,
                     drop_rate):
         layers = []
         for i in range(int(nb_layers)):
-            layers.append(block(i == 0 and in_planes or out_planes,
-                                out_planes, i == 0 and stride or 1, drop_rate))
+            layers.append(
+                block(i == 0 and in_planes or out_planes, out_planes,
+                      i == 0 and stride or 1, drop_rate))
         return nn.Sequential(*layers)
 
     def forward(self, x):
@@ -61,10 +80,16 @@ class NetworkBlock(nn.Module):
 
 
 class RobustWideResNet(nn.Module):
-    def __init__(self, num_classes=10, channel_configs=[16, 160, 320, 640],
-                 depth_configs=[5, 5, 5], stride_config=[1, 2, 2],
-                 stem_stride=1, drop_rate_config=[0.0, 0.0, 0.0],
-                 is_imagenet=False, use_init=True,
+
+    def __init__(self,
+                 num_classes=10,
+                 channel_configs=[16, 160, 320, 640],
+                 depth_configs=[5, 5, 5],
+                 stride_config=[1, 2, 2],
+                 stem_stride=1,
+                 drop_rate_config=[0.0, 0.0, 0.0],
+                 is_imagenet=False,
+                 use_init=True,
                  block_types=['basic_block', 'basic_block', 'basic_block']):
         super(RobustWideResNet, self).__init__()
         assert len(channel_configs) - \
@@ -77,17 +102,24 @@ class RobustWideResNet(nn.Module):
         self.get_stem_out = False
         self.block_types = block_types
 
-        self.stem_conv = nn.Conv2d(3, channel_configs[0], kernel_size=3,
-                                   stride=1, padding=1, bias=False)
+        self.stem_conv = nn.Conv2d(
+            3,
+            channel_configs[0],
+            kernel_size=3,
+            stride=1,
+            padding=1,
+            bias=False)
         self.blocks = nn.ModuleList([])
 
         for i, stride in enumerate(stride_config):
-            self.blocks.append(NetworkBlock(nb_layers=depth_configs[i],
-                                            in_planes=channel_configs[i],
-                                            out_planes=channel_configs[i+1],
-                                            stride=stride,
-                                            drop_rate=drop_rate_config[i],
-                                            block_type=block_types[i]))
+            self.blocks.append(
+                NetworkBlock(
+                    nb_layers=depth_configs[i],
+                    in_planes=channel_configs[i],
+                    out_planes=channel_configs[i + 1],
+                    stride=stride,
+                    drop_rate=drop_rate_config[i],
+                    block_type=block_types[i]))
 
         # global average pooling and classifier
         self.bn1 = nn.BatchNorm2d(channel_configs[-1])

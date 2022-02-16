@@ -22,4 +22,3 @@ If you plan to add some new features that involve large changes, it is encourage
 #### Python
 
 We adopt [PEP8](https://www.python.org/dev/peps/pep-0008/) as the preferred code style.
-

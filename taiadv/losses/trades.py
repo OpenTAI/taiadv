@@ -6,13 +6,16 @@ from torch.autograd import Variable
 
 
 class TRADES(nn.Module):
-    def __init__(self, step_size=0.007, epsilon=0.031, perturb_steps=10,
-                 distance='l_inf', beta=6.0):
-        """
-            Implementation of TRADES based on "Theoretically Principled
-            Trade-off between Robustness and Accuracy" in ICML 2019
-            https://github.com/yaodongyu/TRADES
-        """
+
+    def __init__(self,
+                 step_size=0.007,
+                 epsilon=0.031,
+                 perturb_steps=10,
+                 distance='l_inf',
+                 beta=6.0):
+        """Implementation of TRADES based on "Theoretically Principled Trade-
+        off between Robustness and Accuracy" in ICML 2019
+        https://github.com/yaodongyu/TRADES."""
 
         super(TRADES, self).__init__()
         self.step_size = step_size
@@ -35,29 +38,32 @@ class TRADES(nn.Module):
         if self.distance == 'l_inf':
             for _ in range(self.perturb_steps):
                 x_adv.requires_grad_()
-                loss_kl = self.kl(F.log_softmax(model(x_adv), dim=1),
-                                  F.softmax(logits, dim=1))
+                loss_kl = self.kl(
+                    F.log_softmax(model(x_adv), dim=1),
+                    F.softmax(logits, dim=1))
                 grad = torch.autograd.grad(loss_kl, [x_adv])[0]
                 grad_sign = torch.sign(grad.detach())
                 x_adv = x_adv.detach() + self.step_size * grad_sign
-                x_adv = torch.min(torch.max(x_adv, images - self.epsilon),
-                                  images + self.epsilon)
+                x_adv = torch.min(
+                    torch.max(x_adv, images - self.epsilon),
+                    images + self.epsilon)
                 x_adv = torch.clamp(x_adv, 0.0, 1.0)
         elif self.distance == 'l_2':
             delta = 0.001 * torch.randn(images.shape).cuda().detach()
             delta = Variable(delta.data, requires_grad=True)
 
             # Setup optimizers
-            optimizer_delta = optim.SGD(
-                [delta], lr=self.epsilon / self.perturb_steps * 2)
+            optimizer_delta = optim.SGD([delta],
+                                        lr=self.epsilon / self.perturb_steps *
+                                        2)
 
             for _ in range(self.perturb_steps):
                 adv = images + delta
 
                 # optimize
                 optimizer_delta.zero_grad()
-                loss = (-1) * self.kl(F.log_softmax(model(adv), dim=1),
-                                      F.softmax(logits, dim=1))
+                loss = (-1) * self.kl(
+                    F.log_softmax(model(adv), dim=1), F.softmax(logits, dim=1))
                 loss.backward()
                 # renorming gradient
                 grad_norms = delta.grad.view(batch_size, -1).norm(p=2, dim=1)

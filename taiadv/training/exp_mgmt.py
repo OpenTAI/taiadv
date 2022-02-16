@@ -1,18 +1,21 @@
-import os
 import datetime
-import shutil
-import torch
 import json
+import os
+import shutil
+
+import torch
+
 from . import util
 
 
 class ExperimentManager():
+
     def __init__(self, exp_name, exp_path, config_file_path=None):
         if exp_name == '' or exp_name is None:
             exp_name = 'exp_at' + datetime.datetime.now()
         exp_path = os.path.join(exp_path, exp_name)
         checkpoint_path = os.path.join(exp_path, 'checkpoints')
-        log_filepath = os.path.join(exp_path, exp_name) + ".log"
+        log_filepath = os.path.join(exp_path, exp_name) + '.log'
         stas_hist_path = os.path.join(exp_path, 'stats')
         stas_eval_path = os.path.join(exp_path, 'stats_eval')
 
@@ -23,7 +26,7 @@ class ExperimentManager():
 
         if config_file_path is not None:
             shutil.copyfile(config_file_path,
-                            os.path.join(exp_path, exp_name+'.yaml'))
+                            os.path.join(exp_path, exp_name + '.yaml'))
 
         self.exp_name = exp_name
         self.exp_path = exp_path

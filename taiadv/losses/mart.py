@@ -5,13 +5,16 @@ from torch.autograd import Variable
 
 
 class MART(nn.Module):
-    def __init__(self, step_size=0.007, epsilon=0.031, perturb_steps=10,
-                 distance='l_inf', beta=6.0):
-        """
-            Implementation of MART based on "Improving Adversarial Robustness
-            Requires Revisiting Misclassified Examples" in ICLR 2020
-            https://github.com/YisenWang/MART
-        """
+
+    def __init__(self,
+                 step_size=0.007,
+                 epsilon=0.031,
+                 perturb_steps=10,
+                 distance='l_inf',
+                 beta=6.0):
+        """Implementation of MART based on "Improving Adversarial Robustness
+        Requires Revisiting Misclassified Examples" in ICLR 2020
+        https://github.com/YisenWang/MART."""
 
         super(MART, self).__init__()
         self.step_size = step_size
@@ -34,8 +37,9 @@ class MART(nn.Module):
                 grad = torch.autograd.grad(loss_ce, [x_adv])[0]
                 grad_sign = torch.sign(grad.detach())
                 x_adv = x_adv.detach() + self.step_size * grad_sign
-                x_adv = torch.min(torch.max(x_adv, images - self.epsilon),
-                                  images + self.epsilon)
+                x_adv = torch.min(
+                    torch.max(x_adv, images - self.epsilon),
+                    images + self.epsilon)
                 x_adv = torch.clamp(x_adv, 0.0, 1.0)
         else:
             # only support L_inf for now.
@@ -61,8 +65,8 @@ class MART(nn.Module):
             F.nll_loss(torch.log(1.0001 - adv_probs + 1e-12), new_y)
 
         nat_probs = F.softmax(logits, dim=1)
-        true_probs = torch.gather(
-            nat_probs, 1, (labels.unsqueeze(1)).long()).squeeze()
+        true_probs = torch.gather(nat_probs, 1,
+                                  (labels.unsqueeze(1)).long()).squeeze()
 
         loss_robust = (1.0 / batch_size) * torch.sum(
             torch.sum(self.kl(torch.log(adv_probs + 1e-12), nat_probs), dim=1)

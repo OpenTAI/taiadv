@@ -7,7 +7,7 @@ a part of the [OpenTAI](https://github.com/OpenTAI) project.
 
 - **Designed for Research** We aim at providing highly flexible modules for adversarial machine learning researchers.
 
-- **State of the art** We provide implementations of state-of-the-art attack/defence techniques published in different venues. 
+- **State of the art** We provide implementations of state-of-the-art attack/defence techniques published in different venues.
 
 - **Flexibility** Our framework provide flexible modules that can be integrated with other adversarial ML frameworks such as [RobustBench](https://github.com/RobustBench/robustbench)
 
@@ -18,7 +18,7 @@ a part of the [OpenTAI](https://github.com/OpenTAI) project.
 - **models:** implementations for commonly used models
 - **training** implementations of training pipeline
 
-See [examples](https://github.com/OpenTAI/taiadv/tree/main/examples) for using our training pipeline with other modules to train a robust model. You can also find examples for attack/defense as well. 
+See [examples](https://github.com/OpenTAI/taiadv/tree/main/examples) for using our training pipeline with other modules to train a robust model. You can also find examples for attack/defense as well.
 
 ## Contributing to TAIAdv
 
@@ -35,13 +35,3 @@ TAIAdv is an open-source project that is contributed by researchers from the com
 - [TAIPrivacy](https://github.com/OpenTAI/taiprivacy): Privacy Attack and Defense Toolbox and Benchmark
 - [TAIIP](https://github.com/OpenTAI/taiip): AI Intellectual Property Protection Toolbox and Benchmark
 - [TAIDeepfake](https://github.com/OpenTAI/taideepfake): Deepfake Detection Toolbox and Benchmark
-
-
-
-
-
-
-
-
- 
-

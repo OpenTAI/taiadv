@@ -1,5 +1,7 @@
 import time
+
 import torch
+
 from . import util
 
 if torch.cuda.is_available():
@@ -9,7 +11,12 @@ else:
 
 
 class Trainer():
-    def __init__(self, criterion, data_loader, logger, log_frequency=25,
+
+    def __init__(self,
+                 criterion,
+                 data_loader,
+                 logger,
+                 log_frequency=25,
                  global_step=0):
         self.loader = data_loader
         self.logger = logger
@@ -44,10 +51,11 @@ class Trainer():
         payload = {
             'acc': acc.item(),
             'acc_avg': self.acc_meters.avg,
-            "loss": loss.item(),
-            "loss_avg": self.loss_meters.avg,
-            "lr": optimizer.param_groups[0]['lr'],
-            "|gn|": grad_norm}
+            'loss': loss.item(),
+            'loss_avg': self.loss_meters.avg,
+            'lr': optimizer.param_groups[0]['lr'],
+            '|gn|': grad_norm
+        }
         return payload
 
     def train(self, epoch, model, optimizer, exp_stats={}):
@@ -62,10 +70,11 @@ class Trainer():
             end = time.time()
             time_used = end - start
             if self.global_step % self.log_frequency == 0:
-                display = util.log_display(epoch=epoch,
-                                           global_step=self.global_step,
-                                           time_elapse=time_used,
-                                           **log_payload)
+                display = util.log_display(
+                    epoch=epoch,
+                    global_step=self.global_step,
+                    time_elapse=time_used,
+                    **log_payload)
                 self.logger.info(display)
             self.global_step += 1
         exp_stats['global_step'] = self.global_step
