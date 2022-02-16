@@ -15,7 +15,7 @@ To run the example to train a robust model, please follow the following:
 ```python
     python train.py --exp_path /PATH/TO/YOUR/EXPERIMENT/FOLDER \
                     --exp_name wrn34x10_sat                    \
-                    --exp_configs configs/                     \
+                    --exp_config configs/                     \
 ```
  - **--exp_name** option can be replaced with other experiments configuration files stored under the configs folder.
  - **--exp_path** is where you want to store the experiment's files, such as checkpoints and logs

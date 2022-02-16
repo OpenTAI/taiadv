@@ -37,5 +37,5 @@ dataset:
   test_d_type: 'CIFAR10'
   train_tf_op: 'CIFAR10'
   test_tf_op: 'CIFAR10'
-  train_path: '/data/projects/punim0784/datasets/'
-  test_path: '/data/projects/punim0784/datasets/'
+  train_path: './data/projects/punim0784/datasets/'
+  test_path: './data/projects/punim0784/datasets/'
