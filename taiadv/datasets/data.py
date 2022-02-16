@@ -1,3 +1,4 @@
+# Copyright (c) OpenTAI. All rights reserved.
 import numpy as np
 from torch.utils.data import DataLoader
 from torchvision import transforms

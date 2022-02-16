@@ -1,3 +1,4 @@
+# Copyright (c) OpenTAI. All rights reserved.
 import numpy as np
 from torchvision import transforms
 from torchvision.datasets import CIFAR10, CIFAR100, MNIST, SVHN, ImageNet
