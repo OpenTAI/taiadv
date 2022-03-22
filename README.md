@@ -28,7 +28,7 @@ We appreciate all contributions to improve for TAIAdv. Welcome community users t
 TAIAdv is an open-source project that is contributed by researchers from the community. Part of the code is based on existing papers, either reimplementation or open-source code provided by authors. For complete list of paper, please see [ACKNOWLEDGEMENT.md](https://github.com/OpenTAI/taiadv/blob/main/ACKNOWLEDGEMENT.md)
 
 ## Other Projects in OpenTAI
-- [TAIXIA](https://github.com/OpenTAI/taixai): Explainable AI Toolbox
+- [TAIXAI](https://github.com/OpenTAI/taixai): Explainable AI Toolbox
 - [TAICorruption](https://github.com/OpenTAI/taicorruption): Common Corruption Robustness Toolbox and Benchmark
 - [TAIBackdoor](https://github.com/OpenTAI/taibackdoor): Backdoor Attack and Defense Toolbox and Benchmark
 - [TAIFairness](https://github.com/OpenTAI/taifairness): AI Fairness Toolbox and Benchmark
