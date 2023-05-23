@@ -2,7 +2,7 @@
 checkpoints_dir = './checkpoints/'
 adv_data_dir = './adv_data/'
 adv_data_gray_dir = './adv_data/gray/'
-DATASETS = ['mnist', 'cifar'] # ['mnist', 'cifar', 'imagenet']
+DATASETS = ['mnist', 'cifar']
 ATTACK = [['fgsm_0.125', 'fgsm_0.25', 'fgsm_0.3125', \
             'bim_0.125', 'bim_0.25', 'bim_0.3125', \
             'pgd1_10', 'pgd1_15', 'pgd1_20', \
@@ -11,7 +11,8 @@ ATTACK = [['fgsm_0.125', 'fgsm_0.25', 'fgsm_0.3125', \
             'cwi', \
             'df',\
             'sta',\
-            'sa'
+            'sa',\
+            'zoo'
             ],
             ['fgsm_0.03125', 'fgsm_0.0625', 'fgsm_0.125',\
             'bim_0.03125', 'bim_0.0625', \
@@ -21,7 +22,8 @@ ATTACK = [['fgsm_0.125', 'fgsm_0.25', 'fgsm_0.3125', \
             'cwi', \
             'df',\
             'sta',\
-            'sa'
+            'sa',\
+            'zoo'
             ],
             ['fgsm_0.03125', 'fgsm_0.0625',\
             'bim_0.03125', 'bim_0.0625', 'bim_0.125',\
@@ -51,10 +53,10 @@ fieldnames = ['type',	'nsamples',	'acc_suc',	'acc',	'tpr',	'fpr',	'tp',	'ap',	'f
 env_param = 'env /remote-home/wangxin/venv/detect/bin/python -- ' 
 detectors_dir = './'
 results_path = './results/'
+
 #-------------------------- detect KDE
 # Optimal KDE bandwidths that were determined from CV tuning
 BANDWIDTHS = {'mnist': 1.20, 'cifar': 0.26, 'svhn': 1.00, 'imagenet': 0.26}
-#[0.1, 0.16681005372000587, 0.2782559402207124, 0.46415888336127786, 0.774263682681127, 1.291549665014884, 2.1544346900318834, 3.593813663804626, 5.994842503189409, 10.0]
 kde_results_dir = './results/kde/'
 kde_results_gray_dir = './results/kde/gray/'
 

@@ -62,7 +62,7 @@ def main(args):
     X_train_f_copy = X_train_f
 
     #extract nss features, from adversarial images -- PGD
-    pgds = ['pgdi_0.0625', 'pgdi_0.125', 'pgdi_0.25', 'pgdi_0.3125', 'pgdi_0.5'] # ['pgdi_0.03125', 'pgdi_0.0625', 'pgdi_0.125', 'pgdi_0.25', 'pgdi_0.3125', 'pgdi_0.5']
+    pgds = ['pgdi_0.03125', 'pgdi_0.0625', 'pgdi_0.125', 'pgdi_0.25', 'pgdi_0.3125', 'pgdi_0.5']
     adv_data_f_all = []
     for pgd in pgds:
         adv_data = np.load('%s%s_%s.npy' % (adv_data_dir, args.dataset, pgd))
@@ -129,8 +129,8 @@ def main(args):
                             adv_data_f_all[1][selected_inds[1]],\
                             adv_data_f_all[2][selected_inds[2]],\
                             adv_data_f_all[3][selected_inds[3]],\
-                            adv_data_f_all[4][selected_inds[4]]))
-                            # adv_data_f_all[5][selected_inds[5]]))
+                            adv_data_f_all[4][selected_inds[4]],\
+                            adv_data_f_all[5][selected_inds[5]]))
     y_adv_f = np.ones(len(train_inds), dtype=np.uint8)
     
     x_train = np.concatenate((x_normal_f, x_adv_f))

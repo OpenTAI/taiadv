@@ -24,7 +24,7 @@ STDEVS = {
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.25, 'df': 0.25,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.3, 'sta': 0.3, 'hop': 0.3
+            'sa': 0.3, 'sta': 0.3, 'hop': 0.3, 'zoo': 0.3
             },
     'cifar': {'fgsm_0.03125': 0.03125, 'fgsm_0.0625': 0.0625, 'fgsm_0.125': 0.125, 'fgsm_0.25': 0.25, 'fgsm_0.3125': 0.3125, 'fgsm_0.5': 0.5,\
             'bim_0.03125': 0.03125, 'bim_0.0625': 0.0625, 'bim_0.125': 0.125, 'bim_0.25': 0.25, 'bim_0.3125': 0.3125, 'bim_0.5': 0.5,\
@@ -33,7 +33,7 @@ STDEVS = {
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.125, 'df': 0.125,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.125, 'sta': 0.125, 'hop': 0.125
+            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.3
             },
     'svhn': {'fgsm_0.03125': 0.03125, 'fgsm_0.0625': 0.0625, 'fgsm_0.125': 0.125, 'fgsm_0.25': 0.25, 'fgsm_0.3125': 0.3125, 'fgsm_0.5': 0.5,\
             'bim_0.03125': 0.03125, 'bim_0.0625': 0.0625, 'bim_0.125': 0.125, 'bim_0.25': 0.25, 'bim_0.3125': 0.3125, 'bim_0.5': 0.5,\
@@ -42,7 +42,7 @@ STDEVS = {
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.125, 'df': 0.125,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.125, 'sta': 0.125, 'hop': 0.125
+            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.3
             },
     'tiny': {'fgsm_0.03125': 0.03125, 'fgsm_0.0625': 0.0625, 'fgsm_0.125': 0.125, 'fgsm_0.25': 0.25, 'fgsm_0.3125': 0.3125, 'fgsm_0.5': 0.5,\
             'bim_0.03125': 0.03125, 'bim_0.0625': 0.0625, 'bim_0.125': 0.125, 'bim_0.25': 0.25, 'bim_0.3125': 0.3125, 'bim_0.5': 0.5,\
@@ -51,7 +51,7 @@ STDEVS = {
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.125, 'df': 0.125,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.125, 'sta': 0.125, 'hop': 0.125
+            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.3
             },
 }
 
@@ -81,30 +81,6 @@ def get_noisy_samples(X_test, X_test_adv, dataset, attack):
     :param attack:
     :return:
     """
-    # if attack.startswith('fgsm') or attack.startswith('pgd') or attack.startswith('hca') or attack.startswith('bim'):
-    #     # warnings.warn("Using pre-set Gaussian scale sizes to craft noisy "
-    #     #               "samples. If you've altered the eps/eps-iter parameters "
-    #     #               "of the attacks used, you'll need to update these. In "
-    #     #               "the future, scale sizes will be inferred automatically "
-    #     #               "from the adversarial samples.")
-    #     # Add Gaussian noise to the samples
-    #     X_test_noisy = np.minimum(
-    #         np.maximum(
-    #             X_test + np.random.normal(loc=0, scale=STDEVS[dataset][attack],
-    #                                       size=X_test.shape),
-    #             0
-    #         ),
-    #         1
-    #     )
-    # else:
-    #     X_test_noisy = np.zeros_like(X_test)
-    #     for i in range(len(X_test)):
-    #         # Count the number of pixels that are different
-    #         nb_diff = len(np.where(X_test[i] != X_test_adv[i])[0])
-    #         # Randomly flip an equal number of pixels (flip means move to max
-    #         # value of 1)
-    #         X_test_noisy[i] = flip(X_test[i], nb_diff)
-
     X_test_noisy = np.minimum(
             np.maximum(
                 X_test + np.random.normal(loc=0, scale=STDEVS[dataset][attack],
@@ -117,35 +93,6 @@ def get_noisy_samples(X_test, X_test_adv, dataset, attack):
 
     return X_test_noisy
 
-
-# def get_mc_predictions(model, X, nb_iter=50, batch_size=256):
-#     """
-#     TODO
-#     :param model:
-#     :param X:
-#     :param nb_iter:
-#     :param batch_size:
-#     :return:
-#     """
-#     output_dim = model.layers[-1].output.shape[-1]
-#     get_output = K.function(
-#         [model.layers[0].input, K.learning_phase()],
-#         [model.layers[-1].output]
-#     )
-
-#     def predict():
-#         n_batches = int(np.ceil(X.shape[0] / float(batch_size)))
-#         output = np.zeros(shape=(len(X), output_dim))
-#         for i in range(n_batches):
-#             output[i * batch_size:(i + 1) * batch_size] = \
-#                 get_output([X[i * batch_size:(i + 1) * batch_size], 1])[0]
-#         return output
-
-#     preds_mc = []
-#     for i in tqdm(range(nb_iter)):
-#         preds_mc.append(predict())
-
-#     return np.asarray(preds_mc)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 def get_mc_predictions(model, X, nb_iter=50, batch_size=256):
@@ -169,36 +116,6 @@ def get_mc_predictions(model, X, nb_iter=50, batch_size=256):
 
     return np.asarray(preds_mc)
 
-# def get_deep_representations(model, X, batch_size=256, dataset='mnist'):
-#     """
-#     TODO
-#     :param model:
-#     :param X:
-#     :param batch_size:
-#     :return:
-#     """
-#     if dataset=='tiny' or dataset=='cifar':
-#         # last hidden layer is always at index -4
-#         output_dim = model.layers[-3].output.shape[-1]
-#         get_encoding = K.function(
-#             [model.layers[0].input, K.learning_phase()],
-#             [model.layers[-3].output]
-#         )
-#     else:
-#         # last hidden layer is always at index -4
-#         output_dim = model.layers[-4].output.shape[-1]
-#         get_encoding = K.function(
-#             [model.layers[0].input, K.learning_phase()],
-#             [model.layers[-4].output]
-#         )
-
-#     n_batches = int(np.ceil(X.shape[0] / float(batch_size)))
-#     output = np.zeros(shape=(len(X), output_dim))
-#     for i in range(n_batches):
-#         output[i * batch_size:(i + 1) * batch_size] = \
-#             get_encoding([X[i * batch_size:(i + 1) * batch_size], 0])[0]
-
-#     return output
 def get_deep_representations(model, X, batch_size=256, dataset='mnist'):
     model.eval()
     X = torch.Tensor(X).to(device)
@@ -211,8 +128,7 @@ def get_deep_representations(model, X, batch_size=256, dataset='mnist'):
             break
 
     # output_dim = list_modules[last_hidden_idx].out_features if isinstance(list_modules[last_hidden_idx], nn.Linear) else list_modules[last_hidden_idx].out_channels
-    # print(output_dim)
-    print(list_modules[last_hidden_idx])
+    # print(list_modules[last_hidden_idx])
 
     last_hidden_output = None
     def last_hidden_hook(module, fea_in, fea_out):

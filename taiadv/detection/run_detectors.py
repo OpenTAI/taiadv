@@ -2,7 +2,6 @@ import os
 import matplotlib
 matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
-import pickle
 from common.util import *
 from setup_paths import *
 
@@ -37,17 +36,7 @@ for dataset in DATASETS:
     print("NSS  --  dataset: {}  --  attack: all ".format(dataset))
     os.system('{}{}detect_nss.py -d={} -s={}'.format(env_param, detectors_dir, dataset, seed))
 
-# #run NIC
-# for dataset in DATASETS:
-#     print("NIC  --  dataset :: {}  --  attack :: all ".format(dataset))
-#     os.system('{}{}detect_nic.py -d={} -s={}'.format(env_param, detectors_dir, dataset, seed))
-
-# #run DNR
-# for dataset in DATASETS[0:3]:
-#     print("dataset :: {}  -- attack :: all ".format(dataset))
-#     os.system('{}{}detect_dnr.py -d={}'.format(env_param, detectors_dir, dataset))
-
-# #run SFAD
-# for dataset in DATASETS:
-#     print("dataset :: {}  -- attack :: all ".format(dataset))
-#     os.system('{}{}detect_sfad.py -d={}'.format(env_param, detectors_dir, dataset))
+#run NIC
+for dataset in DATASETS:
+    print("NIC  --  dataset :: {}  --  attack :: all ".format(dataset))
+    os.system('{}{}detect_nic.py -d={} -s={}'.format(env_param, detectors_dir, dataset, seed))

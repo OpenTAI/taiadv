@@ -261,7 +261,9 @@ def main(args):
                 if vis.size == 0:
                     vis = vi
                 else:
-                    vis = np.concatenate((vis, vi), axis=1)
+                    # vis = np.concatenate((vis, vi), axis=1)
+                    vis = np.column_stack((vis, vi))
+
         #nic train data
         nic_train = np.concatenate((pis, vis), axis=1)
         np.save(nic_train_path, nic_train)
