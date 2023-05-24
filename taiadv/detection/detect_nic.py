@@ -3,6 +3,8 @@ from common.util import *
 from setup_paths import *
 from sklearn.decomposition import FastICA, PCA
 from sklearn import svm
+from thundersvm import OneClassSVM
+
 import pickle
 import time
 
@@ -168,15 +170,15 @@ def main(args):
                 layer_data = np.load(layer_data_path)
                 n_features = np.min([min_features, layer_data.shape[1]])
                 layer_data = layer_data[:,:n_features]
-                clf = svm.OneClassSVM(nu=0.01, kernel="rbf", gamma=1, verbose=True)
+                clf = OneClassSVM(nu=0.01, kernel="rbf", gamma=1, verbose=True)
                 st = time.time()
                 clf.fit(layer_data)
                 predict_result = clf.predict(layer_data)
                 decision_result = clf.decision_function(layer_data)
                 #Saving
-                # clf.save_to_file(model_path)
-                with open(model_path, 'wb') as file:
-                    pickle.dump(clf, file)
+                clf.save_to_file(model_path)
+                # with open(model_path, 'wb') as file:
+                #     pickle.dump(clf, file)
 
                 np.save(pi_predict_normal_path, predict_result)
                 np.save(pi_decision_normal_path, decision_result)
@@ -331,10 +333,10 @@ def main(args):
                     layer_data = np.load(layer_adv_path)
                     n_features = np.min([min_features, layer_data.shape[1]])
                     layer_data = layer_data[:,:n_features]
-                    clf = svm.OneClassSVM(nu=0.01, kernel="rbf", gamma=0.1, verbose=True)
-                    # clf.load_from_file(model_path)
-                    with open(model_path, 'rb') as file:
-                        clf = pickle.load(file)
+                    clf = OneClassSVM(nu=0.01, kernel="rbf", gamma=0.1, verbose=True)
+                    clf.load_from_file(model_path)
+                    # with open(model_path, 'rb') as file:
+                    #     clf = pickle.load(file)
 
                     decision_result = clf.decision_function(layer_data)
                     np.save(pi_decision_adv_path, decision_result)
