@@ -65,6 +65,11 @@ k_nn = [20, 30, 20, 30]
 lid_results_dir = './results/lid/'
 lid_results_gray_dir = './results/lid/gray/'
 
+#-------------------------- detect multiLID
+k_nn = [20, 30, 20, 30]
+multiLID_results_dir = './results/multiLID/'
+multiLID_results_gray_dir = './results/multiLID/gray/'
+
 #-------------------------- detect MagNet
 magnet_results_dir = './results/magnet/'
 magnet_results_gray_dir = './results/magnet/gray/'

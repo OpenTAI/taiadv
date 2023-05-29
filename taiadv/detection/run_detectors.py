@@ -26,6 +26,13 @@ for dataset in DATASETS:
         print("LID  --  dataset: {}  --  attack: {} ".format(dataset, attack))
         os.system('{}{}detect_lid.py -d={} -a={} -k={} -s={}'.format(env_param, detectors_dir, dataset, attack, k_nn[DATASETS.index(dataset)], seed))
 
+#run multiLID
+for dataset in DATASETS:
+    ATTACKS = ATTACK[DATASETS.index(dataset)]
+    for attack in ATTACKS:
+        print("multiLID  --  dataset: {}  --  attack: {} ".format(dataset, attack))
+        os.system('{}{}detect_multiLID.py -d={} -a={} -k={} -s={}'.format(env_param, detectors_dir, dataset, attack, k_nn[DATASETS.index(dataset)], seed))
+
 #run MagNet
 for dataset in DATASETS:
     print("MagNet  --  dataset: {}  --  attack: all ".format(dataset))

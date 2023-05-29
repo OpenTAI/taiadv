@@ -28,10 +28,10 @@ class Net(nn.Module):
         )
 
     def forward(self, x):
-        out = self.layer1(x)
+        out = self.layer0(x)
+        out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
-        out = self.layer4(out)
         return out
     
 class MNISTCNN:

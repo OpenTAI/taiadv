@@ -12,24 +12,12 @@ class CIFAR10CNN:
         # Load data
         self.num_classes = 10
         (self.x_train, self.y_train), (self.x_test, self.y_test), self.min_pixel_value, self.max_pixel_value = load_cifar10()
+        
         # Swap axes to PyTorch's NCHW format
         self.x_train = np.transpose(self.x_train, (0, 3, 1, 2)).astype(np.float32)
         self.x_test = np.transpose(self.x_test, (0, 3, 1, 2)).astype(np.float32)
         self.input_shape = self.x_train.shape[1:]
         print(self.input_shape)
-        transform_train = transforms.Compose([
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            # transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ])
-
-        transform_test = transforms.Compose([
-            # transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ])
-        self.x_train = transform_train(torch.from_numpy(self.x_train)).numpy()
-        self.x_test = transform_test(torch.from_numpy(self.x_test)).numpy()
 
         if mode=='train':
             # build model

@@ -19,6 +19,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dataset', required=True, type=str, help="Dataset to use; either 'mnist', 'cifar', or 'imagenet'")
     parser.add_argument('-e', '--epochs', required=False, type=int, default=50, help="The number of epochs to train for.")
-    parser.add_argument('-b', '--batch_size', required=False, type=int, default=128, help="The batch size to use for training.")
+    parser.add_argument('-b', '--batch_size', required=False, type=int, default=512, help="The batch size to use for training.")
     args = parser.parse_args()
     main(args)
