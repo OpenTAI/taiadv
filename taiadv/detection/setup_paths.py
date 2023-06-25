@@ -11,8 +11,7 @@ ATTACK = [['fgsm_0.125', 'fgsm_0.25', 'fgsm_0.3125', \
             'cwi', \
             'df',\
             'sta',\
-            'sa',\
-            'zoo'
+            'sa'
             ],
             ['fgsm_0.03125', 'fgsm_0.0625', 'fgsm_0.125',\
             'bim_0.03125', 'bim_0.0625', \
@@ -23,7 +22,7 @@ ATTACK = [['fgsm_0.125', 'fgsm_0.25', 'fgsm_0.3125', \
             'df',\
             'sta',\
             'sa',\
-            'zoo'
+            'ap'
             ],
             ['fgsm_0.03125', 'fgsm_0.0625',\
             'bim_0.03125', 'bim_0.0625', 'bim_0.125',\
@@ -34,7 +33,7 @@ ATTACK = [['fgsm_0.125', 'fgsm_0.25', 'fgsm_0.3125', \
             'df',\
             'sta',\
             'sa',\
-            # 'zoo'
+            'ap'
             ]
         ]
 
@@ -47,7 +46,7 @@ ALL_ATTACKS = ['fgsm_0.03125', 'fgsm_0.0625', 'fgsm_0.125', 'fgsm_0.25', 'fgsm_0
             'hca_0.03125', 'hca_0.0625', 'hca_0.125', 'hca_0.3125', 'hca_0.5',\
             'df',\
             'sa', 'hop', 'sta',\
-            'zoo'
+            'ap'
            ]
 fieldnames = ['type',	'nsamples',	'acc_suc',	'acc',	'tpr',	'fpr',	'tp',	'ap',	'fb',	'an',	'tprs',	'fprs',	'auc']
 env_param = 'env /remote-home/wangxin/venv/detect/bin/python -- ' 

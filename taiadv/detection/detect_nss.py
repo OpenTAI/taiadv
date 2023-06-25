@@ -15,8 +15,9 @@ def main(args):
     assert args.dataset in DATASETS, \
         "Dataset parameter must be either 'mnist', 'cifar', or 'imagenet'"
     ATTACKS = ATTACK[DATASETS.index(args.dataset)]
-    assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
-        'model file not found... must first train model using train_model.py.'
+    if args.dataset != 'imagenet':
+        assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
+            'model file not found... must first train model using train_model.py.'
 
     pgd_per = pgd_percent[DATASETS.index(args.dataset)]
 
@@ -25,12 +26,15 @@ def main(args):
     if args.dataset == 'mnist':
         from baseline.cnn.cnn_mnist import MNISTCNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
- 
+        classifier = model_class.classifier
     elif args.dataset == 'cifar':
         from baseline.cnn.cnn_cifar10 import CIFAR10CNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
+        classifier = model_class.classifier
+    elif args.dataset == 'imagenet':
+        from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
 
     # Load the dataset
     X_test, Y_test = model_class.x_test, model_class.y_test

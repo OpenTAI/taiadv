@@ -48,28 +48,27 @@ def main(args):
     assert args.dataset in DATASETS, \
         "Dataset parameter must be either {}".format(DATASETS)
     ATTACKS = ATTACK[DATASETS.index(args.dataset)]
-    assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
-        'model file not found... must first train model using train_model.py.'
+    if args.dataset != 'imagenet':
+        assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
+            'model file not found... must first train model using train_model.py.'
 
     print('Loading the data and model...')
     # Load the model
     if args.dataset == 'mnist':
         from baseline.cnn.cnn_mnist import MNISTCNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
+        classifier = model_class.classifier
         start_indx = 1
-        
     elif args.dataset == 'cifar':
         from baseline.cnn.cnn_cifar10 import CIFAR10CNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
+        classifier = model_class.classifier
         start_indx = 1
-
     elif args.dataset == 'imagenet':
         from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
-        model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
-        start_indx = 675
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
+        start_indx = 1
 
     # Load the dataset
     X_train, _, X_test, Y_test = model_class.x_train, model_class.y_train, model_class.x_test, model_class.y_test

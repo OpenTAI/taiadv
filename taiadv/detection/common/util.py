@@ -25,6 +25,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchsummary import summary
+from torchvision.utils import save_image
 from art.estimators.classification import PyTorchClassifier
 from art.utils import load_mnist, load_cifar10
 
@@ -63,81 +64,6 @@ class GetLoader(Data.Dataset):
     
     def __len__(self):
         return len(self.data)
-
-'''
-def load_cifar10_data():
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
-
-    return (x_train, y_train), (x_test, y_test)
-
-
-def load_mnist_data():
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
-    x_train = np.reshape(x_train, (60000, 28, 28, 1))
-    x_test = np.reshape(x_test, (10000, 28, 28, 1))
-
-    return (x_train, y_train), (x_test, y_test)
-
-def load_svhn_data():
-    if not os.path.isfile("/media/aaldahdo/SAMSUNG/DL_Datasets/SVHN/cropped/train_32x32.mat"):
-        print('Downloading SVHN train set...')
-        call(
-            "curl -o /media/aaldahdo/SAMSUNG/DL_Datasets/SVHN/cropped/train_32x32.mat "
-            "http://ufldl.stanford.edu/housenumbers/train_32x32.mat",
-            shell=True
-        )
-    if not os.path.isfile("/media/aaldahdo/SAMSUNG/DL_Datasets/SVHN/cropped/test_32x32.mat"):
-        print('Downloading SVHN test set...')
-        call(
-            "curl -o /media/aaldahdo/SAMSUNG/DL_Datasets/SVHN/cropped/test_32x32.mat "
-            "http://ufldl.stanford.edu/housenumbers/test_32x32.mat",
-            shell=True
-        )
-    train = sio.loadmat('/media/aaldahdo/SAMSUNG/DL_Datasets/SVHN/cropped/train_32x32.mat')
-    test = sio.loadmat('/media/aaldahdo/SAMSUNG/DL_Datasets/SVHN/cropped/test_32x32.mat')
-    x_train = np.transpose(train['X'], axes=[3, 0, 1, 2])
-    x_test = np.transpose(test['X'], axes=[3, 0, 1, 2])
-    # reshape (n_samples, 1) to (n_samples,) and change 1-index to 0-index
-    y_train = np.reshape(train['y'], (-1,)) - 1
-    y_test = np.reshape(test['y'], (-1,)) - 1
-
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
-    x_train = np.reshape(x_train, (73257, 32, 32, 3))
-    x_test = np.reshape(x_test, (26032, 32, 32, 3))
-
-    return (x_train, y_train), (x_test, y_test)
-
-def load_tiny_imagenet_data():
-    open_file = open('/home/aaldahdo/adv_dnn/tiny_imagenet/tiny_xtrain.bytes', 'rb')
-    data_bytes = open_file.read()
-    x_train = np.frombuffer(data_bytes, dtype=np.uint8)
-    x_train = x_train.reshape(100000,64,64,3)
-
-    open_file = open('/home/aaldahdo/adv_dnn/tiny_imagenet/tiny_ytrain.bytes', 'rb')
-    data_bytes = open_file.read()
-    y_train = np.frombuffer(data_bytes, dtype=np.uint8)
-    y_train = y_train.reshape(100000)
-
-    open_file = open('/home/aaldahdo/adv_dnn/tiny_imagenet/tiny_xtest.bytes', 'rb')
-    data_bytes = open_file.read()
-    x_test = np.frombuffer(data_bytes, dtype=np.uint8)
-    x_test = x_test.reshape(10000,64,64,3)
-
-    open_file = open('/home/aaldahdo/adv_dnn/tiny_imagenet/tiny_ytest.bytes', 'rb')
-    data_bytes = open_file.read()
-    y_test = np.frombuffer(data_bytes, dtype=np.uint8)
-    y_test = y_test.reshape(10000)
-    
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
-
-    return (x_train, y_train), (x_test, y_test)
-'''
 
 def get_tpr_fpr(true_labels, pred_labels):
     TP = np.sum(np.logical_and(pred_labels == 1, true_labels == 1))

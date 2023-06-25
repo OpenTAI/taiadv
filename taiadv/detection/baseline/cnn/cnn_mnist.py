@@ -72,15 +72,18 @@ class MNISTCNN:
         net.to(self.device)
         # summary(net, input_size=self.input_shape)
         
+        mean = [0.1307]
+        std  = [0.3081]
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(net.parameters(), lr=0.01)
         classifier = PyTorchClassifier(
             model=net,
-            clip_values=(self.min_pixel_value, self.max_pixel_value),
+            clip_values=(0, 1),
             loss=criterion,
             optimizer=optimizer,
             input_shape=self.input_shape,
             nb_classes=self.num_classes,
+            preprocessing=(mean, std)
         )
 
         return classifier

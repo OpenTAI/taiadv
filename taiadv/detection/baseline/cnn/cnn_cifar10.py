@@ -41,17 +41,19 @@ class CIFAR10CNN:
     def art_classifier(self, net):
         net.to(self.device)
         # summary(net, input_size=self.input_shape)
-        # print(net)
-
+        
+        mean = np.asarray((0.4914, 0.4822, 0.4465)).reshape((3, 1, 1))
+        std = np.asarray((0.2023, 0.1994, 0.2010)).reshape((3, 1, 1))
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(net.parameters(), lr=0.001)
         classifier = PyTorchClassifier(
             model=net,
-            clip_values=(self.min_pixel_value, self.max_pixel_value),
+            clip_values=(0, 1),
             loss=criterion,
             optimizer=optimizer,
             input_shape=self.input_shape,
             nb_classes=self.num_classes,
+            preprocessing=(mean, std)
         )
         
         return classifier

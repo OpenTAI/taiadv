@@ -1,7 +1,6 @@
 import argparse
 from common.util import *
 from setup_paths import *
-from sklearn.metrics import accuracy_score, precision_score, recall_score
 from fs.datasets.datasets_utils import * 
 from fs.utils.squeeze import *
 
@@ -52,23 +51,26 @@ def main(args):
         "Dataset parameter must be either 'mnist', 'cifar' or 'imagenet'"
     ATTACKS = ATTACK[DATASETS.index(args.dataset)]
 
-    assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
-        'model file not found... must first train model using train_model.py.'
+    if args.dataset != 'imagenet':
+        assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
+            'model file not found... must first train model using train_model.py.'
 
     print('Loading the data and model...')
     # Load the model
     if args.dataset == 'mnist':
         from baseline.cnn.cnn_mnist import MNISTCNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
-
+        classifier = model_class.classifier
     elif args.dataset == 'cifar':
         from baseline.cnn.cnn_cifar10 import CIFAR10CNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
-
+        classifier = model_class.classifier
+    elif args.dataset == 'imagenet':
+        from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
     # Load the dataset
-    X_test_all, Y_test_all, Min, Max = model_class.x_test, model_class.y_test, model_class.min_pixel_value, model_class.max_pixel_value
+    X_test_all, Y_test_all = model_class.x_test, model_class.y_test
 
     #--------------
     # Evaluate the trained model.
@@ -114,10 +116,9 @@ def main(args):
         X_test_adv = X_test_adv[inds_correct]
         X_test_adv = X_test_adv[indx_test]
         
-        predictions = classifier.predict(X_test_adv)
         # loss, acc_suc = model.evaluate(X_test_adv, y_test, verbose=0)
         X_test_adv_pred = classifier.predict(X_test_adv)
-        acc_suc = np.sum(np.argmax(predictions, axis=1) == np.argmax(y_indx_test, axis=1)) / len(y_indx_test)
+        acc_suc = np.sum(np.argmax(X_test_adv_pred, axis=1) == np.argmax(y_indx_test, axis=1)) / len(y_indx_test)
 
         inds_success = np.where(X_test_adv_pred.argmax(axis=1) != y_indx_test.argmax(axis=1))[0]
         inds_fail = np.where(X_test_adv_pred.argmax(axis=1) == y_indx_test.argmax(axis=1))[0]

@@ -13,8 +13,9 @@ def main(args):
     ATTACKS = ATTACK[DATASETS.index(args.dataset)]
     assert args.attack in ATTACKS, \
         "Train attack must be either {}".format(ATTACKS)
-    assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
-        'model file not found... must first train model'
+    if args.dataset != 'imagenet':
+        assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
+            'model file not found... must first train model'
     assert os.path.isfile('{}{}_{}.npy'.format(adv_data_dir, args.dataset, args.attack)), \
         'adversarial sample file not found... must first craft adversarial samples'
     print('Loading the data and model...')
@@ -23,12 +24,15 @@ def main(args):
     if args.dataset == 'mnist':
         from baseline.cnn.cnn_mnist import MNISTCNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
-        
+        classifier = model_class.classifier
     elif args.dataset == 'cifar':
         from baseline.cnn.cnn_cifar10 import CIFAR10CNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
+        classifier = model_class.classifier
+    elif args.dataset == 'imagenet':
+        from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
 
     # Load the dataset
     X_train, Y_train, X_test, Y_test = model_class.x_train, model_class.y_train, model_class.x_test, model_class.y_test
@@ -110,14 +114,13 @@ def main(args):
     for i in range(Y_train.shape[1]):
         class_inds[i] = np.where(Y_train.argmax(axis=1) == i)[0]
     kdes = {}
-    warnings.warn("Using pre-set kernel bandwidths that were determined "
-                  "optimal for the specific CNN models of the paper. If you've "
-                  "changed your model, you'll need to re-optimize the "
-                  "bandwidth.")
+    # warnings.warn("Using pre-set kernel bandwidths that were determined "
+    #               "optimal for the specific CNN models of the paper. If you've "
+    #               "changed your model, you'll need to re-optimize the "
+    #               "bandwidth.")
     for i in range(Y_train.shape[1]):
-        kdes[i] = KernelDensity(kernel='gaussian',
-                                bandwidth=BANDWIDTHS[args.dataset]) \
-            .fit(X_train_features[class_inds[i]])
+        kdes[i] = KernelDensity(kernel='gaussian', bandwidth=BANDWIDTHS[args.dataset]).fit(X_train_features[class_inds[i]])
+        
     # Get model predictions
     print('Computing model predictions...')
     preds_test_normal = classifier.predict(X_test, verbose=0)

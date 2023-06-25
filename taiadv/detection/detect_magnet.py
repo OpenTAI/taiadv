@@ -28,15 +28,16 @@ def main(args):
         "Dataset parameter must be either 'mnist', 'cifar', or 'imagenet'"
     ATTACKS = ATTACK[DATASETS.index(args.dataset)]
 
-    assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
-        'model file not found... must first train model using train_model.py.'
+    if args.dataset != 'imagenet':
+        assert os.path.isfile('{}cnn_{}.pt'.format(checkpoints_dir, args.dataset)), \
+            'model file not found... must first train model using train_model.py.'
 
     print('Loading the data and model...')
     # Load the model
     if args.dataset == 'mnist':
         from baseline.cnn.cnn_mnist import MNISTCNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
+        classifier = model_class.classifier
         # modelx = Model(inputs=classifier.get_input_at(0), outputs=classifier.get_layer('classification_head_before_activation').output)
         clip_min, clip_max = 0,1
         v_noise=0.1
@@ -46,11 +47,10 @@ def main(args):
         t=10
         drop_rate={"I": 0.001, "II": 0.001}
         epochs=100
-        
     elif args.dataset == 'cifar':
         from baseline.cnn.cnn_cifar10 import CIFAR10CNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
-        classifier=model_class.classifier
+        classifier = model_class.classifier
         # modelx = Model(inputs=classifier.get_input_at(0), outputs=classifier.get_layer('classification_head_before_softmax').output)
         clip_min, clip_max = 0,1
         v_noise=0.025
@@ -58,6 +58,19 @@ def main(args):
         p2=1
         type='error'
         t=40
+        drop_rate={"I": 0.005, "II": 0.005}
+        epochs=400
+    elif args.dataset == 'imagenet':
+        from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
+        # modelx = Model(inputs=classifier.get_input_at(0), outputs=classifier.get_layer('classification_head_before_activation').output)
+        clip_min, clip_max = 0,1
+        v_noise=0.025
+        p1=1
+        p2=1
+        type='error'
+        t=10
         drop_rate={"I": 0.005, "II": 0.005}
         epochs=400
 
@@ -80,7 +93,7 @@ def main(args):
     detector_II = DenoisingAutoEncoder_2(im_dim)
     loader_train = GetLoader(X_train, Y_train)
     datas = Data.DataLoader(loader_train, batch_size=256, shuffle=True, drop_last=False, num_workers=2)
-
+    
     if os.path.isfile('{}{}'.format(magnet_results_dir, detector_i_filename)):
         detector_I.load('{}{}'.format(magnet_results_dir, detector_i_filename))
     else:
@@ -102,14 +115,14 @@ def main(args):
 
     # Make AEs ready
     if type=='error':
-        if args.dataset=='mnist':
-            detect_I = AEDetector(detector_I.model, p=p1)
-            detect_II = AEDetector(detector_II.model, p=p2)
-            reformer = SimpleReformer(detector_I.model)
-        elif args.dataset=='cifar':
+        if args.dataset=='cifar':
             detect_I = AEDetector(detector_I.model, p=p1)
             detect_II = AEDetector(detector_I.model, p=p2)
             reformer = SimpleReformer(detector_II.model)
+        else:
+            detect_I = AEDetector(detector_I.model, p=p1)
+            detect_II = AEDetector(detector_II.model, p=p2)
+            reformer = SimpleReformer(detector_I.model)
         detector_dict = dict()
         detector_dict["I"] = detect_I
         detector_dict["II"] = detect_II

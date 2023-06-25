@@ -6,6 +6,8 @@ from setup_paths import *
 from art.attacks.evasion import FastGradientMethod, BasicIterativeMethod, CarliniL2Method, CarliniLInfMethod, ProjectedGradientDescent, DeepFool, SpatialTransformation, SquareAttack, ZooAttack, AdversarialPatchPyTorch
 
 def main(args):
+    set_seed(args)
+
     assert args.dataset in ['mnist', 'cifar', 'imagenet'], \
         "dataset parameter must be either 'mnist', 'cifar', or 'imagenet'"
     print('Dataset: %s' % args.dataset)
@@ -40,15 +42,15 @@ def main(args):
     
     elif args.dataset == 'imagenet':
         from baseline.cnn.cnn_imagenet import ImageNetCNN as model
-        model_cifar = model(mode='train', filename='cnn_{}.pt'.format(args.dataset))
-        classifier = model_cifar.classifier
+        model_imagenet = model(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_imagenet.classifier
 
         epsilons=[8/256, 16/256, 32/256, 64/256, 80/256, 128/256]
         epsilons1=[5, 10, 15, 20, 25, 30, 40]
         epsilons2=[0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]
         eps_sa=0.125
-        x_test = model_cifar.x_val
-        y_test = model_cifar.y_val
+        x_test = model_imagenet.x_val
+        y_test = model_imagenet.y_val
         translation = 8
         rotation = 30
 
@@ -127,12 +129,12 @@ def main(args):
     np.save(adv_file_path, adv_data)
     print('Done - {}'.format(adv_file_path))
 
-    #ZOO attack
-    attack = ZooAttack(classifier=classifier, batch_size=32)
-    adv_data = attack.generate(x=x_test, y=y_test)
-    adv_file_path = adv_data_dir + args.dataset + '_zoo.npy'
-    np.save(adv_file_path, adv_data)
-    print('Done - {}'.format(adv_file_path))
+    # #ZOO attack
+    # attack = ZooAttack(classifier=classifier, batch_size=32)
+    # adv_data = attack.generate(x=x_test, y=y_test)
+    # adv_file_path = adv_data_dir + args.dataset + '_zoo.npy'
+    # np.save(adv_file_path, adv_data)
+    # print('Done - {}'.format(adv_file_path))
 
     #Adversarial Patch attack
     if args.dataset != 'mnist':
@@ -148,9 +150,10 @@ def main(args):
                     verbose=True,
                     optimizer='pgd'
                 )
-        # patch, patch_mask= attack.generate(x=x_test, y=y_test)
+        patch, patch_mask= attack.generate(x=x_test, y=y_test)
+        save_image(torch.from_numpy(patch * patch_mask), 'ap.jpg')
         adv_data = attack.apply_patch(x=x_test, scale=0.2)
-        adv_file_path = adv_data_dir + args.dataset + '_advpatch.npy'
+        adv_file_path = adv_data_dir + args.dataset + '_ap.npy'
         np.save(adv_file_path, adv_data)
         print('Done - {}'.format(adv_file_path))
 
@@ -158,5 +161,6 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dataset', required=True, type=str, help="Dataset to use; either 'mnist', 'cifar', or 'imagenet'")
+    parser.add_argument('-s', '--seed', help='set seed for model', default=123, type=int)
     args = parser.parse_args()
     main(args)

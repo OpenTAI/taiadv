@@ -1,9 +1,5 @@
 import numpy as np
 from functools import reduce
-import pdb
-
-# from .visualization import show_imgs_in_rows
-
 
 def get_next_class(Y_test):
     num_classes = Y_test.shape[1]
@@ -68,14 +64,14 @@ def get_match_pred_vec(Y_pred, Y_label):
     assert len(Y_pred) == len(Y_label)
     Y_pred_class = np.argmax(Y_pred, axis = 1)
     Y_label_class = np.argmax(Y_label, axis = 1)
+ 
     return Y_pred_class == Y_label_class
 
 
 def calculate_accuracy(Y_pred, Y_label):
     match_pred_vec = get_match_pred_vec(Y_pred, Y_label)
-
     accuracy = np.sum(match_pred_vec) / float(len(Y_label))
-    # pdb.set_trace()
+
     return accuracy
 
 
