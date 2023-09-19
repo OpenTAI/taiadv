@@ -46,7 +46,7 @@ STDEVS = {
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.125, 'df': 0.125,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125
+            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125, 'ap': 0.125
             },
     'svhn': {'fgsm_0.03125': 0.03125, 'fgsm_0.0625': 0.0625, 'fgsm_0.125': 0.125, 'fgsm_0.25': 0.25, 'fgsm_0.3125': 0.3125, 'fgsm_0.5': 0.5,\
             'bim_0.03125': 0.03125, 'bim_0.0625': 0.0625, 'bim_0.125': 0.125, 'bim_0.25': 0.25, 'bim_0.3125': 0.3125, 'bim_0.5': 0.5,\
@@ -55,16 +55,16 @@ STDEVS = {
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.125, 'df': 0.125,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125
+            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125, 'ap': 0.125
             },
-    'tiny': {'fgsm_0.03125': 0.03125, 'fgsm_0.0625': 0.0625, 'fgsm_0.125': 0.125, 'fgsm_0.25': 0.25, 'fgsm_0.3125': 0.3125, 'fgsm_0.5': 0.5,\
+    'imagenet': {'fgsm_0.03125': 0.03125, 'fgsm_0.0625': 0.0625, 'fgsm_0.125': 0.125, 'fgsm_0.25': 0.25, 'fgsm_0.3125': 0.3125, 'fgsm_0.5': 0.5,\
             'bim_0.03125': 0.03125, 'bim_0.0625': 0.0625, 'bim_0.125': 0.125, 'bim_0.25': 0.25, 'bim_0.3125': 0.3125, 'bim_0.5': 0.5,\
             'pgd1_5': 0.03125, 'pgd1_10': 0.0625, 'pgd1_15': 0.125, 'pgd1_20': 0.125, 'pgd1_25': 0.125, 'pgd1_30': 0.25, 'pgd1_40': 0.3125,\
             'pgd2_0.25': 0.03125, 'pgd2_0.3125': 0.0625, 'pgd2_0.5': 0.125, 'pgd2_1': 0.125, 'pgd2_1.5': 0.25, 'pgd2_2': 0.3125,\
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.125, 'df': 0.125,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125
+            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125, 'ap': 0.125
             },
 }
 
@@ -75,7 +75,7 @@ CLIP_MAX = 1.0
 PATH_DATA = "data/"
 
 # Set random seed
-np.random.seed(0)
+# np.random.seed(0)
 
 def get_noisy_samples(X_test, X_test_adv, dataset, attack):
     """
@@ -143,15 +143,14 @@ def mle_single(data, x, k=20):
 
 # lid of a batch of query points X
 def mle_batch(data, batch, k):
-    data = np.asarray(data, dtype=np.float32)
-    batch = np.asarray(batch, dtype=np.float32)
-
     k = min(k, len(data)-1)
-    f = lambda v: - k / np.sum(np.log(v/v[-1]))
-    a = cdist(batch, data)
-    a = np.apply_along_axis(np.sort, axis=1, arr=a)[:,1:k+1]
-    a = np.apply_along_axis(f, axis=1, arr=a)
-    return a
+    f = lambda v: - k / torch.sum(torch.log(v/v[-1]))
+    a = torch.cdist(batch, data)
+    a, _ = torch.sort(a, dim=1)
+    a = a[:,1:k+1]
+    lid = torch.stack([f(x) for x in torch.unbind(a, dim=0)]).cpu().detach().numpy()
+
+    return lid
 
 # mean distance of x to its k nearest neighbours
 def kmean_batch(data, batch, k):
@@ -176,11 +175,6 @@ def kmean_pca_batch(data, batch, k=10):
         a[i] = kmean_batch(tmp_pca[:-1], tmp_pca[-1], k=k)
     return a
 
-features_out_hook = []
-def hook(module, fea_in, fea_out):
-    features_out_hook.append(fea_out)
-    return None
-
 def get_lids_random_batch(model, X, X_noisy, X_adv, dataset, k=10, batch_size=100):
     """
     Get the local intrinsic dimensionality of each Xi in X_adv
@@ -200,45 +194,39 @@ def get_lids_random_batch(model, X, X_noisy, X_adv, dataset, k=10, batch_size=10
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
 
-    for (name, module) in model.named_children():
-        module.register_forward_hook(hook=hook)
-
-    lid_dim = len([index for index in model.named_children()])
+    # get deep representations
+    funcs = [torch.nn.Sequential(*list(model.children())[:i+1]) for i in range(len(list(model.children())))]
+    lid_dim = len(funcs)
     print("Number of layers to estimate: ", lid_dim)
 
     def estimate(i_batch):
-        global features_out_hook
+        # estimation of the MLE batch
         start = i_batch * batch_size
         end = np.minimum(len(X), (i_batch + 1) * batch_size)
         n_feed = end - start
+
+        # prepare data structure 
         lid_batch = np.zeros(shape=(n_feed, lid_dim))
         lid_batch_adv = np.zeros(shape=(n_feed, lid_dim))
         lid_batch_noisy = np.zeros(shape=(n_feed, lid_dim))
 
-        for i in range(lid_dim):
-            features_out_hook = []
-            model(torch.tensor(X[start:end]).to(device))
-            # print("X_act: ", X_act.shape)
-            X_act = features_out_hook[i].reshape(n_feed, -1).cpu().detach().numpy()
+        for i, func in enumerate(funcs):
+            if i+1 == lid_dim:
+                func = model
+            X_act = func(torch.Tensor(X[start:end]).to(device))
+            X_act = X_act.reshape((n_feed, -1))
 
-            features_out_hook = []
-            model(torch.tensor(X_adv[start:end]).to(device))
-            # print("X_adv_act: ", X_adv_act.shape)
-            X_adv_act = features_out_hook[i].reshape(n_feed, -1).cpu().detach().numpy()
+            X_adv_act = func(torch.Tensor(X_adv[start:end]).to(device))
+            X_adv_act = X_adv_act.reshape((n_feed, -1))
 
-            features_out_hook = []
-            model(torch.tensor(X_noisy[start:end]).to(device))
-            # print("X_noisy_act: ", X_noisy_act.shape)
-            X_noisy_act = features_out_hook[i].reshape(n_feed, -1).cpu().detach().numpy()
+            X_noisy_act = func(torch.Tensor(X_noisy[start:end]).to(device))
+            X_noisy_act = X_noisy_act.reshape((n_feed, -1))
 
             # random clean samples
             # Maximum likelihood estimation of local intrinsic dimensionality (LID)
             lid_batch[:, i] = mle_batch(X_act, X_act, k=k)
-            # print("lid_batch: ", lid_batch.shape)
             lid_batch_adv[:, i] = mle_batch(X_act, X_adv_act, k=k)
-            # print("lid_batch_adv: ", lid_batch_adv.shape)
             lid_batch_noisy[:, i] = mle_batch(X_act, X_noisy_act, k=k)
-            # print("lid_batch_noisy: ", lid_batch_noisy.shape)
 
         return lid_batch, lid_batch_noisy, lid_batch_adv
 
@@ -247,22 +235,20 @@ def get_lids_random_batch(model, X, X_noisy, X_adv, dataset, k=10, batch_size=10
     lids_noisy = []
     n_batches = int(np.ceil(X.shape[0] / float(batch_size)))
 
-    with torch.no_grad():  # Disable gradient calculation
-        for i_batch in tqdm(range(n_batches)):
-            lid_batch, lid_batch_noisy, lid_batch_adv = estimate(i_batch)
-            lids.extend(lid_batch)
-            lids_adv.extend(lid_batch_adv)
-            lids_noisy.extend(lid_batch_noisy)
-            # print("lids: ", lids.shape)
-            # print("lids_adv: ", lids_noisy.shape)
-            # print("lids_noisy: ", lids_noisy.shape)
+    for i_batch in tqdm(range(n_batches)):
+        lid_batch, lid_batch_noisy, lid_batch_adv = estimate(i_batch)
+        lids.extend(lid_batch)
+        lids_adv.extend(lid_batch_adv)
+        lids_noisy.extend(lid_batch_noisy)
+        # print("lids: ", np.array(lids).shape)
+        # print("lids_adv: ", np.array(lids_noisy).shape)
+        # print("lids_noisy: ", np.array(lids_noisy).shape)
 
-    lids = np.asarray(lids, dtype=np.float32)
-    lids_noisy = np.asarray(lids_noisy, dtype=np.float32)
-    lids_adv = np.asarray(lids_adv, dtype=np.float32)
+    lids = np.asarray(lids)
+    lids_noisy = np.asarray(lids_noisy)
+    lids_adv = np.asarray(lids_adv)
 
     return lids, lids_noisy, lids_adv
-
 
 def normalize(normal, adv, noisy):
     """Z-score normalisation
@@ -387,7 +373,7 @@ def block_split(X, Y):
     :param Y: 
     :return: 
     """
-    print("Isolated split 80%, 20% for training and testing")
+    print("Isolated split 70%, 30% for training and testing")
     num_samples = X.shape[0]
     partition = int(num_samples / 3)
     X_adv, Y_adv = X[:partition], Y[:partition]

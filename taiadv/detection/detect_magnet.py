@@ -5,12 +5,13 @@ from setup_paths import *
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from magnet.defensive_models import DenoisingAutoEncoder_1, DenoisingAutoEncoder_2
 from magnet.worker import *
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 def test(dic, X, thrs):
     dist_all = []
     pred_labels = []
     for d in dic:
-        m = dic[d].mark(torch.as_tensor(X)) # m = np.reshape(dic[d].mark(X), (len(X),1))
+        m = dic[d].mark(torch.as_tensor(X))
         dist_all.append(m)
         pred_labels.append(m>thrs[d])
     
@@ -25,7 +26,7 @@ def main(args):
     set_seed(args)
 
     assert args.dataset in DATASETS, \
-        "Dataset parameter must be either 'mnist', 'cifar', or 'imagenet'"
+        "Dataset parameter must be either 'mnist', 'cifar', 'svhn' or 'imagenet'"
     ATTACKS = ATTACK[DATASETS.index(args.dataset)]
 
     if args.dataset != 'imagenet':
@@ -38,7 +39,6 @@ def main(args):
         from baseline.cnn.cnn_mnist import MNISTCNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_class.classifier
-        # modelx = Model(inputs=classifier.get_input_at(0), outputs=classifier.get_layer('classification_head_before_activation').output)
         clip_min, clip_max = 0,1
         v_noise=0.1
         p1=2
@@ -51,26 +51,36 @@ def main(args):
         from baseline.cnn.cnn_cifar10 import CIFAR10CNN as myModel
         model_class = myModel(mode='load', filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_class.classifier
-        # modelx = Model(inputs=classifier.get_input_at(0), outputs=classifier.get_layer('classification_head_before_softmax').output)
         clip_min, clip_max = 0,1
         v_noise=0.025
         p1=1
         p2=1
         type='error'
         t=40
-        drop_rate={"I": 0.005, "II": 0.005}
-        epochs=400
+        drop_rate={"I": 0.001, "II": 0.001}
+        epochs=300
     elif args.dataset == 'imagenet':
         from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
         model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_class.classifier
-        # modelx = Model(inputs=classifier.get_input_at(0), outputs=classifier.get_layer('classification_head_before_activation').output)
         clip_min, clip_max = 0,1
         v_noise=0.025
         p1=1
         p2=1
         type='error'
         t=10
+        drop_rate={"I": 0.005, "II": 0.005}
+        epochs=400
+    elif args.dataset == 'svhn':
+        from baseline.cnn.cnn_svhn import SVHNCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
+        clip_min, clip_max = 0,1
+        v_noise=0.025
+        p1=1
+        p2=1
+        type='error'
+        t=40
         drop_rate={"I": 0.005, "II": 0.005}
         epochs=400
 
@@ -92,7 +102,7 @@ def main(args):
     detector_I = DenoisingAutoEncoder_1(im_dim)
     detector_II = DenoisingAutoEncoder_2(im_dim)
     loader_train = GetLoader(X_train, Y_train)
-    datas = Data.DataLoader(loader_train, batch_size=256, shuffle=True, drop_last=False, num_workers=2)
+    datas = Data.DataLoader(loader_train, batch_size=256, shuffle=True, drop_last=False, num_workers=4)
     
     if os.path.isfile('{}{}'.format(magnet_results_dir, detector_i_filename)):
         detector_I.load('{}{}'.format(magnet_results_dir, detector_i_filename))
@@ -174,6 +184,7 @@ def main(args):
         testAttack = AttackData(torch.as_tensor(X_test_adv), torch.as_tensor(np.argmax(Y_test, axis=1)), attack)
         evaluator = Evaluator(operator, testAttack)
         thrs = evaluator.operator.get_thrs(drop_rate)
+        print("================",thrs)
 
         #For Y_all 
         Y_all_pred, Y_all_pred_score = test(detector_dict, X_all, thrs)

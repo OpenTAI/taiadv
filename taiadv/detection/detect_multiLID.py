@@ -7,7 +7,7 @@ from multiLID.util import (random_split, block_split, train_lr, compute_roc, mul
 # warnings.filterwarnings("ignore")
 
 #method from the original paper gitub code available on /lid folder
-def get_lid(model, X_test, X_test_noisy, X_test_adv, k=10, batch_size=100, dataset='mnist'):
+def get_multilid(model, X_test, X_test_noisy, X_test_adv, k=10, batch_size=100, dataset='mnist'):
     """
     Get local intrinsic dimensionality
     :param model: 
@@ -58,7 +58,11 @@ def main(args):
         from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
         model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_class.classifier
-
+    elif args.dataset == 'svhn':
+        from baseline.cnn.cnn_svhn import SVHNCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
+        
     # Load the dataset
     X_test, Y_test = model_class.x_test, model_class.y_test
 
@@ -94,7 +98,7 @@ def main(args):
         X = np.load(lid_file_X)
         Y = np.load(lid_file_Y)
     else:
-        X, Y = get_lid(classifier.model, X_test, X_test_noisy, X_test_adv, k_nn[DATASETS.index(args.dataset)], args.batch_size, args.dataset)
+        X, Y = get_multilid(classifier.model, X_test, X_test_noisy, X_test_adv, k_multiLID[DATASETS.index(args.dataset)], args.batch_size, args.dataset)
         np.save(lid_file_X, X)
         np.save(lid_file_Y, Y)
     

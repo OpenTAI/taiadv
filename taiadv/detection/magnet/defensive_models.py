@@ -1,5 +1,4 @@
 import torch
-import torch.nn.functional as F
 from torch import nn
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -23,8 +22,9 @@ class DenoisingAutoEncoder_1():
                 nn.Sigmoid()).to(device)
     
     def train(self, data, save_path, v_noise=0, min=0, max=1, num_epochs=100, if_save=True):
-        optimizer = torch.optim.Adam(self.model.parameters())
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)
         log_interval = 100
+        criterion = nn.MSELoss()
         for epoch in range(num_epochs):
             self.model.train()
             for batch_i, (data_train,data_label) in enumerate(data):
@@ -34,10 +34,10 @@ class DenoisingAutoEncoder_1():
                 noisy_data = torch.autograd.Variable(noisy_data).to(device)
                 optimizer.zero_grad()
                 output = self.model(noisy_data)
-                loss = F.mse_loss(output, data_train)
+                loss = criterion(output, data_train)
                 loss.backward()
                 optimizer.step()
-                if batch_i % log_interval == 0:
+                if (epoch % 100 == 0) and (batch_i % log_interval == 0):
                     print(f'Train Epoch: {epoch} [{batch_i}/{len(data)} \t Loss: {loss.item()}]')
 
         if if_save:
@@ -60,8 +60,9 @@ class DenoisingAutoEncoder_2():
                 nn.Sigmoid()).to(device)
         
     def train(self, data, save_path, v_noise=0, min=0, max=1, num_epochs=100, if_save=True):
-        optimizer = torch.optim.Adam(self.model.parameters())
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)
         log_interval = 100
+        criterion = nn.MSELoss()
         for epoch in range(num_epochs):
             self.model.train()
             for batch_i, (data_train,data_label) in enumerate(data):
@@ -69,10 +70,9 @@ class DenoisingAutoEncoder_2():
                 noisy_data = torch.clamp(data_train+noise, min=min, max=max) 
                 data_train = torch.autograd.Variable(data_train).to(device)
                 noisy_data = torch.autograd.Variable(noisy_data).to(device)
-
                 optimizer.zero_grad()
                 output = self.model(noisy_data)
-                loss = F.mse_loss(output,data_train)
+                loss = criterion(output,data_train)
                 loss.backward()
                 optimizer.step()
                 if (epoch % 100 == 0) and (batch_i % log_interval == 0):

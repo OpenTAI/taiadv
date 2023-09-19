@@ -116,6 +116,77 @@ def get_least_likely_class(Y_pred):
     Y_target_labels = np.argmin(Y_pred, axis=1)
     return np.eye(num_classes)[Y_target_labels]
 
+def load_svhn(raw: bool = False):
+    if not os.path.isfile("./Datasets/SVHN/cropped/train_32x32.mat"):
+        print('Downloading SVHN train set...')
+        call(
+            "curl -o ./Datasets/SVHN/cropped/train_32x32.mat "
+            "http://ufldl.stanford.edu/housenumbers/train_32x32.mat",
+            shell=True
+        )
+
+    if not os.path.isfile("./Datasets/SVHN/cropped/test_32x32.mat"):
+        print('Downloading SVHN test set...')
+        call(
+            "curl -o ./Datasets/SVHN/cropped/test_32x32.mat "
+            "http://ufldl.stanford.edu/housenumbers/test_32x32.mat",
+            shell=True
+        )
+
+    train = sio.loadmat('./Datasets/SVHN/cropped/train_32x32.mat')
+    test = sio.loadmat('./Datasets/SVHN/cropped/test_32x32.mat')
+    x_train = np.transpose(train['X'], axes=[3, 0, 1, 2])
+    x_test = np.transpose(test['X'], axes=[3, 0, 1, 2])
+    # reshape (n_samples, 1) to (n_samples,) and change 1-index to 0-index
+    y_train = train['y'] - 1
+    y_test = test['y'] - 1
+
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+    x_train = np.reshape(x_train, (73257, 32, 32, 3))
+    x_test = np.reshape(x_test, (26032, 32, 32, 3))
+
+    min_, max_ = 0.0, 255.0
+    if not raw:
+        min_, max_ = 0.0, 1.0
+        x_train, y_train = preprocess(x_train, y_train, clip_values=(0, 255))
+        x_test, y_test = preprocess(x_test, y_test, clip_values=(0, 255))
+
+    return (x_train, y_train), (x_test, y_test), min_, max_
+
+def preprocess(x: np.ndarray, y: np.ndarray, nb_classes: int = 10, clip_values: tuple = (0, 255)):
+    """
+    Scales `x` to [0, 1] and converts `y` to class categorical confidences.
+
+    :param x: Data instances.
+    :param clip_values: Original data range allowed value for features, either one respective scalar or one value per
+           feature.
+    :return: Rescaled values of `x`.
+    """
+    if clip_values is None:
+        min_, max_ = np.amin(x), np.amax(x)
+    else:
+        min_, max_ = clip_values
+    normalized_x = (x - min_) / (max_ - min_)
+    categorical_y = to_categorical(y, nb_classes)
+
+    return normalized_x, categorical_y
+
+def to_categorical(labels, nb_classes) -> np.ndarray:
+    """
+    Convert an array of labels to binary class matrix.
+
+    :param labels: An array of integer labels of shape `(nb_samples,)`.
+    :param nb_classes: The number of classes (possible labels).
+    :return: A binary matrix representation of `y` in the shape `(nb_samples, nb_classes)`.
+    """
+    labels = np.array(labels, dtype=int)
+    if nb_classes is None:
+        nb_classes = np.max(labels) + 1
+    categorical = np.zeros((labels.shape[0], nb_classes), dtype=np.float32)
+    categorical[np.arange(labels.shape[0]), np.squeeze(labels)] = 1
+    return categorical
+
 class Average_Saliency(object):
     def __init__(self, model, output_index=0):
         pass

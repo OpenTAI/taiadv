@@ -41,7 +41,7 @@ STDEVS = {
             'pgdi_0.03125': 0.03125, 'pgdi_0.0625': 0.0625, 'pgdi_0.125': 0.125, 'pgdi_0.25': 0.25, 'pgdi_0.3125': 0.3125, 'pgdi_0.5': 0.5,\
             'cwi': 0.125, 'df': 0.125,\
             'hca_0.03125': 0.03125, 'hca_0.0625': 0.0625, 'hca_0.125': 0.125, 'hca_0.25': 0.25, 'hca_0.3125': 0.3125, 'hca_0.5': 0.5,\
-            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125
+            'sa': 0.125, 'sta': 0.125, 'hop': 0.125, 'zoo': 0.125, 'ap': 0.125
             },
     'svhn': {'fgsm_0.03125': 0.03125, 'fgsm_0.0625': 0.0625, 'fgsm_0.125': 0.125, 'fgsm_0.25': 0.25, 'fgsm_0.3125': 0.3125, 'fgsm_0.5': 0.5,\
             'bim_0.03125': 0.03125, 'bim_0.0625': 0.0625, 'bim_0.125': 0.125, 'bim_0.25': 0.25, 'bim_0.3125': 0.3125, 'bim_0.5': 0.5,\
@@ -139,14 +139,11 @@ def mle_single(data, x, k=20):
 def mle_batch(data, batch, k):
     data  = np.asarray(data,  dtype=np.float32)
     batch = np.asarray(batch, dtype=np.float32)
+    
     # select number of neighbors
     k = min(k, len(data)-1)
-    
-    ##########################################################################
     # f  = lambda v: - k / np.sum( np.log(v/v[-1]) ) # original LID
-    ##########################################################################
     f2 = lambda v: - np.log( v / v[-1] ) # multiLID
-    ##########################################################################
     dist = cdist(batch, data)
     dist = np.apply_along_axis(np.sort, axis=1, arr=dist)[:,1:k+1]
     multi_lid = np.apply_along_axis(f2, axis=1, arr=dist)

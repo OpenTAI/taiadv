@@ -4,6 +4,7 @@ matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 from common.util import *
 from setup_paths import *
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 seed = 123
 
@@ -24,14 +25,14 @@ for dataset in DATASETS:
     ATTACKS = ATTACK[DATASETS.index(dataset)]
     for attack in ATTACKS:
         print("LID  --  dataset: {}  --  attack: {} ".format(dataset, attack))
-        os.system('{}{}detect_lid.py -d={} -a={} -k={} -s={}'.format(env_param, detectors_dir, dataset, attack, k_nn[DATASETS.index(dataset)], seed))
+        os.system('{}{}detect_lid.py -d={} -a={} -k={} -s={}'.format(env_param, detectors_dir, dataset, attack, k_lid[DATASETS.index(dataset)], seed))
 
 #run multiLID
 for dataset in DATASETS:
     ATTACKS = ATTACK[DATASETS.index(dataset)]
     for attack in ATTACKS:
         print("multiLID  --  dataset: {}  --  attack: {} ".format(dataset, attack))
-        os.system('{}{}detect_multiLID.py -d={} -a={} -k={} -s={}'.format(env_param, detectors_dir, dataset, attack, k_nn[DATASETS.index(dataset)], seed))
+        os.system('{}{}detect_multiLID.py -d={} -a={} -k={} -s={}'.format(env_param, detectors_dir, dataset, attack, k_multiLID[DATASETS.index(dataset)], seed))
 
 #run MagNet
 for dataset in DATASETS:

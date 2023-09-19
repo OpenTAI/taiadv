@@ -35,7 +35,11 @@ def main(args):
         from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
         model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_class.classifier
-
+    elif args.dataset == 'svhn':
+        from baseline.cnn.cnn_svhn import SVHNCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
+        
     # Load the dataset
     X_test, Y_test = model_class.x_test, model_class.y_test
 

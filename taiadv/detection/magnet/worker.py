@@ -165,13 +165,29 @@ class Operator:
         Y_true = untrusted_obj.labels.to(device)
         
         X_prime = self.reformer.heal(X)
-        Y = torch.argmax(self.classifier(X), axis=1)
+        
+        # Y = torch.argmax(self.classifier(X), axis=1)
+        Y = torch.cat(self.batch(X, batch_size=4096), dim=0)
         Y_judgement = (Y == Y_true[:len(X_prime)]).cpu().detach().numpy()
-        Y_prime = torch.argmax(self.classifier(X_prime), axis=1)
+        # Y_prime = torch.argmax(self.classifier(X_prime), axis=1)
+        Y_prime = torch.cat(self.batch(X_prime, batch_size=4096), dim=0)
         Y_prime_judgement = (Y_prime == Y_true[:len(X_prime)]).cpu().detach().numpy()
 
         return np.array(list(zip(Y_judgement, Y_prime_judgement)))
 
+    def batch(self, X, batch_size=128):
+        """
+        Split X into batches.
+        """
+        predictions = []
+        for i in range(0, X.size(0), batch_size):
+            end_idx = min(i+batch_size, X.size(0))
+            batch_X = X[i:end_idx]
+            batch_predictions = torch.argmax(self.classifier(batch_X), axis=1)
+            predictions.append(batch_predictions)
+
+        return predictions
+    
     def filter(self, X, thrs):
         """
         untrusted_obj: Untrusted input to test against.

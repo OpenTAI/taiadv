@@ -4,11 +4,12 @@ import numpy as np
 from common.util import *
 from setup_paths import *
 from art.attacks.evasion import FastGradientMethod, BasicIterativeMethod, CarliniL2Method, CarliniLInfMethod, ProjectedGradientDescent, DeepFool, SpatialTransformation, SquareAttack, ZooAttack, AdversarialPatchPyTorch
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 def main(args):
     set_seed(args)
 
-    assert args.dataset in ['mnist', 'cifar', 'imagenet'], \
+    assert args.dataset in ['mnist', 'cifar', 'svhn', 'imagenet'], \
         "dataset parameter must be either 'mnist', 'cifar', or 'imagenet'"
     print('Dataset: %s' % args.dataset)
 
@@ -16,7 +17,6 @@ def main(args):
         from baseline.cnn.cnn_mnist import MNISTCNN as model
         model_mnist = model(mode='load', filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_mnist.classifier
-        
         epsilons=[8/256, 16/256, 32/256, 64/256, 80/256, 128/256]
         epsilons1=[5, 10, 15, 20, 25, 30, 40]
         epsilons2=[0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]
@@ -30,7 +30,6 @@ def main(args):
         from baseline.cnn.cnn_cifar10 import CIFAR10CNN as model
         model_cifar = model(mode='load', filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_cifar.classifier
-
         epsilons=[8/256, 16/256, 32/256, 64/256, 80/256, 128/256]
         epsilons1=[5, 10, 15, 20, 25, 30, 40]
         epsilons2=[0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]
@@ -39,12 +38,24 @@ def main(args):
         y_test = model_cifar.y_test
         translation = 8
         rotation = 30
-    
+
+    elif args.dataset == 'svhn':
+        from baseline.cnn.cnn_svhn import SVHNCNN as model
+        model_svhn = model(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_svhn.classifier
+        epsilons=[8/256, 16/256, 32/256, 64/256, 80/256, 128/256]
+        epsilons1=[5, 10, 15, 20, 25, 30, 40]
+        epsilons2=[0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]
+        eps_sa=0.125
+        x_test = model_svhn.x_test
+        y_test = model_svhn.y_test
+        translation = 10
+        rotation = 60
+
     elif args.dataset == 'imagenet':
         from baseline.cnn.cnn_imagenet import ImageNetCNN as model
         model_imagenet = model(filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_imagenet.classifier
-
         epsilons=[8/256, 16/256, 32/256, 64/256, 80/256, 128/256]
         epsilons1=[5, 10, 15, 20, 25, 30, 40]
         epsilons2=[0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]
@@ -102,7 +113,7 @@ def main(args):
     print('Done - {}'.format(adv_file_path))
 
     #CW2 - SLOW
-    attack = CarliniL2Method(classifier=classifier, max_iter=10, batch_size=1, confidence=10)
+    attack = CarliniL2Method(classifier=classifier, max_iter=10, confidence=10)
     adv_data = attack.generate(x=x_test)
     adv_file_path = adv_data_dir + args.dataset + '_cw2.npy'
     np.save(adv_file_path, adv_data)
@@ -129,7 +140,7 @@ def main(args):
     np.save(adv_file_path, adv_data)
     print('Done - {}'.format(adv_file_path))
 
-    # #ZOO attack
+    #ZOO attack
     # attack = ZooAttack(classifier=classifier, batch_size=32)
     # adv_data = attack.generate(x=x_test, y=y_test)
     # adv_file_path = adv_data_dir + args.dataset + '_zoo.npy'

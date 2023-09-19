@@ -56,7 +56,11 @@ def main(args):
         from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
         model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
         classifier = model_class.classifier
-
+    elif args.dataset == 'svhn':
+        from baseline.cnn.cnn_svhn import SVHNCNN as myModel
+        model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
+        classifier = model_class.classifier
+        
     # Load the dataset
     X_test, Y_test = model_class.x_test, model_class.y_test
 
@@ -92,7 +96,7 @@ def main(args):
         X = np.load(lid_file_X)
         Y = np.load(lid_file_Y)
     else:
-        X, Y = get_lid(classifier.model, X_test, X_test_noisy, X_test_adv, k_nn[DATASETS.index(args.dataset)], args.batch_size, args.dataset)
+        X, Y = get_lid(classifier.model, X_test, X_test_noisy, X_test_adv, k_lid[DATASETS.index(args.dataset)], args.batch_size, args.dataset)
         np.save(lid_file_X, X)
         np.save(lid_file_Y, Y)
     
@@ -122,10 +126,8 @@ def main(args):
     y_test = np.concatenate([y_normal, y_adv])
     ind_adv_start = int(len(X_test_adv)*0.007)*100
     pred_adv = classifier.predict(X_test_adv[ind_adv_start:])
-
-    # loss, acc_suc = classifier.evaluate(X_test_adv[ind_adv_start:], Y_test[ind_adv_start:])
     acc_suc = np.sum(np.argmax(pred_adv, axis=1) == np.argmax(Y_test[ind_adv_start:], axis=1)) / len(Y_test[ind_adv_start:])
-        
+
     inds_success = np.where(pred_adv.argmax(axis=1) != Y_test[ind_adv_start:].argmax(axis=1))[0]
     inds_fail = np.where(pred_adv.argmax(axis=1) == Y_test[ind_adv_start:].argmax(axis=1))[0]
     X_success = np.concatenate([x_normal[inds_success], x_adv[inds_success]])
@@ -148,7 +150,7 @@ def main(args):
     roc_auc_all = auc(fprs_all, tprs_all)
     print("AUC: {:.4f}%, Overall accuracy: {:.4f}%, FPR value: {:.4f}%".format(100*roc_auc_all, 100*acc_all, 100*fpr_all))
 
-    curr_result = {'type':'all', 'nsamples': len(pred_adv),	'acc_suc': acc_suc,	\
+    curr_result = {'type':'all', 'nsamples': len(inds_correct),	'acc_suc': acc_suc,	\
                     'acc': acc_all, 'tpr': tpr_all, 'fpr': fpr_all, 'tp': tp_all, 'ap': ap_all, 'fb': fb_all, 'an': an_all,	\
                     'tprs': list(fprs_all), 'fprs': list(tprs_all),	'auc': roc_auc_all}
     results_all.append(curr_result)
@@ -209,7 +211,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--dataset', help="Dataset to use; either {}".format(DATASETS), required=True, type=str)
     parser.add_argument('-a', '--attack', help="Attack to use train the discriminator; either  {}".format(ATTACK), required=True, type=str)
     parser.add_argument('-b', '--batch_size', help="The batch size to use for training.", default=100, type=int)
-    parser.add_argument('-k', '--k_nearest', help="The number of nearest neighbours to use; either 10, 20, 100 ", default=20, type=int)
+    parser.add_argument('-k', '--k_nearest', help="The number of nearest neighbours to use; either 10, 20, 100 ", required=False, type=int)
     parser.add_argument('-s', '--seed', help='set seed for model', default=123, type=int)
     args = parser.parse_args()
     main(args)
