@@ -5,7 +5,6 @@ from setup_paths import *
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from magnet.defensive_models import DenoisingAutoEncoder_1, DenoisingAutoEncoder_2
 from magnet.worker import *
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 def test(dic, X, thrs):
     dist_all = []
@@ -57,8 +56,8 @@ def main(args):
         p2=1
         type='error'
         t=40
-        drop_rate={"I": 0.001, "II": 0.001}
-        epochs=300
+        drop_rate={"I": 0.01, "II": 0.01}
+        epochs=400
     elif args.dataset == 'imagenet':
         from baseline.cnn.cnn_imagenet import ImageNetCNN as myModel
         model_class = myModel(filename='cnn_{}.pt'.format(args.dataset))
@@ -126,8 +125,8 @@ def main(args):
     # Make AEs ready
     if type=='error':
         if args.dataset=='cifar':
-            detect_I = AEDetector(detector_I.model, p=p1)
-            detect_II = AEDetector(detector_I.model, p=p2)
+            detect_I = AEDetector(detector_II.model, p=p1)
+            detect_II = AEDetector(detector_II.model, p=p2)
             reformer = SimpleReformer(detector_II.model)
         else:
             detect_I = AEDetector(detector_I.model, p=p1)
@@ -184,7 +183,6 @@ def main(args):
         testAttack = AttackData(torch.as_tensor(X_test_adv), torch.as_tensor(np.argmax(Y_test, axis=1)), attack)
         evaluator = Evaluator(operator, testAttack)
         thrs = evaluator.operator.get_thrs(drop_rate)
-        print("================",thrs)
 
         #For Y_all 
         Y_all_pred, Y_all_pred_score = test(detector_dict, X_all, thrs)

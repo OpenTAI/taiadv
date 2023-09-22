@@ -1,7 +1,6 @@
 from __future__ import division, absolute_import, print_function
 import argparse
 from common.util import *
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 def main(args):
     assert args.dataset in ['mnist', 'cifar' ,'svhn', 'imagenet'], \

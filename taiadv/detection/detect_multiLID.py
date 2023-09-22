@@ -3,8 +3,6 @@ from common.util import *
 from setup_paths import *
 from sklearn.preprocessing import scale, MinMaxScaler, StandardScaler
 from multiLID.util import (random_split, block_split, train_lr, compute_roc, multiLID, get_noisy_samples)
-# import warnings
-# warnings.filterwarnings("ignore")
 
 #method from the original paper gitub code available on /lid folder
 def get_multilid(model, X_test, X_test_noisy, X_test_adv, k=10, batch_size=100, dataset='mnist'):

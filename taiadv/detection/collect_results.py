@@ -60,6 +60,7 @@ for ds in DATASETS:
                     DRS=np.round(100*np.float32(current_result[1]['tpr']), decimals=2)
                     DRF=np.round(100*np.float32(current_result[2]['tpr']), decimals=2)
                     DR=np.round(100*np.float32(current_result[0]['acc']), decimals=2)
+                    AUC=np.round(100*np.float32(current_result[0]['auc']), decimals=2)
 
                     key_dr=fn[csv_dir_indx+1]
                     key_fpr=fn[csv_dir_indx+2]
@@ -69,7 +70,7 @@ for ds in DATASETS:
                     f[key_dr] = DRF
                     f[key_fpr] = FPR
                     all[key_dr] = DR
-                    all[key_fpr] = FPR
+                    all[key_fpr] = AUC
             
         s_dict[att_indx] = s
         f_dict[att_indx] = f

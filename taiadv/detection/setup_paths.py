@@ -3,16 +3,16 @@ checkpoints_dir = './checkpoints/'
 adv_data_dir = './adv_data/'
 adv_data_gray_dir = './adv_data/gray/'
 DATASETS = ['mnist', 'cifar', 'svhn']
-ATTACK = [['fgsm_0.03125', 'fgsm_0.0625',\
-            'bim_0.03125', 'bim_0.0625',\
+ATTACK = [['fgsm_0.03125', 'fgsm_0.0625','fgsm_0.125',\
+            'bim_0.03125', 'bim_0.0625','bim_0.125',\
             'pgdi_0.03125', 'pgdi_0.0625','pgdi_0.125',\
             'cwi',\
             'df',\
             'sta',\
             'sa'
             ],
-            ['fgsm_0.03125', 'fgsm_0.0625',\
-            'bim_0.03125', 'bim_0.0625',\
+            ['fgsm_0.03125', 'fgsm_0.0625','fgsm_0.125',\
+            'bim_0.03125', 'bim_0.0625','bim_0.125',\
             'pgdi_0.03125', 'pgdi_0.0625','pgdi_0.125',\
             'cwi',\
             'df',\
@@ -20,17 +20,17 @@ ATTACK = [['fgsm_0.03125', 'fgsm_0.0625',\
             'sa',\
             'ap'
             ],
-            ['fgsm_0.03125', 'fgsm_0.0625',\
-            # 'bim_0.03125', 'bim_0.0625',\
-            # 'pgdi_0.03125', 'pgdi_0.0625','pgdi_0.125',\
-            # 'cwi',\
-            # 'df',\
-            # 'sta',\
-            # 'sa',\
-            # 'ap'
+            ['fgsm_0.03125', 'fgsm_0.0625','fgsm_0.125',\
+            'bim_0.03125', 'bim_0.0625','bim_0.125',\
+            'pgdi_0.03125', 'pgdi_0.0625','pgdi_0.125',\
+            'cwi',\
+            'df',\
+            'sta',\
+            'sa',\
+            'ap'
             ],
-            ['fgsm_0.03125', 'fgsm_0.0625',\
-            'bim_0.03125', 'bim_0.0625',\
+            ['fgsm_0.03125', 'fgsm_0.0625','fgsm_0.125',\
+            'bim_0.03125', 'bim_0.0625','bim_0.125',\
             'pgdi_0.03125', 'pgdi_0.0625','pgdi_0.125',\
             'cwi',\
             'df',\
@@ -40,8 +40,8 @@ ATTACK = [['fgsm_0.03125', 'fgsm_0.0625',\
             ]
         ]
 
-ALL_ATTACKS = ['fgsm_0.03125', 'fgsm_0.0625',\
-            'bim_0.03125', 'bim_0.0625',\
+ALL_ATTACKS = ['fgsm_0.03125', 'fgsm_0.0625','fgsm_0.125',\
+            'bim_0.03125', 'bim_0.0625','bim_0.125',\
             'pgdi_0.03125', 'pgdi_0.0625','pgdi_0.125',\
             'cwi',\
             'df',\
@@ -80,5 +80,3 @@ nss_results_dir = './results/nss/'
 #-------------------------- detect NIC
 nic_results_dir = './results/nic/'
 nic_layers_dir = './results/nic/layers/'
-
-

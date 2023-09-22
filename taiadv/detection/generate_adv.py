@@ -1,10 +1,8 @@
 import argparse
 import numpy as np
-
 from common.util import *
 from setup_paths import *
 from art.attacks.evasion import FastGradientMethod, BasicIterativeMethod, CarliniL2Method, CarliniLInfMethod, ProjectedGradientDescent, DeepFool, SpatialTransformation, SquareAttack, ZooAttack, AdversarialPatchPyTorch
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 def main(args):
     set_seed(args)

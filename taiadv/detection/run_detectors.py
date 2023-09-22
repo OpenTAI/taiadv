@@ -4,7 +4,6 @@ matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 from common.util import *
 from setup_paths import *
-os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 seed = 123
 
