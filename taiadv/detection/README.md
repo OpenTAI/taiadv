@@ -1,23 +1,23 @@
-# Adversarial-Example-Detection
+![image](https://github.com/OpenTAI/taiadv/assets/66816775/e4216498-ea61-4a9c-9887-304928903324)![image](https://github.com/OpenTAI/taiadv/assets/66816775/83653ecf-5d91-4a92-87df-ca25521e48ff)# Adversarial-Example-Detection
 This is a project for detecting adversarial examples. It supports the MNIST, CIFAR-10, and SVHN datasets, and currently includes detection methods such as KDE, LID, NSS, FS, Magnet, NIC, and MultiLID.
 
 Attack method: fgsm, bim, pgd, cw, deepfool, spatial transofrmation attack, square attack, adversarial patch
 
 Detect method: 
 
-(1)[KDE](https://arxiv.org/pdf/1703.00410): KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
+(1)[KDE](https://arxiv.org/pdf/1703.00410): KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities [1].
 
-(2)[LID](https://arxiv.org/pdf/1801.02613): This method extracts features from each intermediate layer of a deep neural network and employs the Local Intrinsic Dimensionality metric to detect adversarial samples.
+(2)[LID](https://arxiv.org/pdf/1801.02613): This method extracts features from each intermediate layer of a deep neural network and employs the Local Intrinsic Dimensionality metric to detect adversarial samples [2].
 
-(3)[NSS](https://ieeexplore.ieee.org/document/9206959): This method propose to characterize the AEs through the use of natural scene statistics.
+(3)[NSS](https://ieeexplore.ieee.org/document/9206959): This method propose to characterize the AEs through the use of natural scene statistics [3].
 
-(4)[FS](https://arxiv.org/abs/1704.01155): This method employs feature squeezing to reduce the dimensionality of input samples and then detects adversarial samples based on the changes in the model's output before and after compression.
+(4)[FS](https://arxiv.org/abs/1704.01155): This method employs feature squeezing to reduce the dimensionality of input samples and then detects adversarial samples based on the changes in the model's output before and after compression [4].
 
-(5)[MagNet](https://arxiv.org/abs/1705.09064): This method detects adversarial samples by assessing the ability to reconstruct normal samples while being unable to reconstruct adversarial samples. The AEs can be easily distinguished from those of normal samples using MSCN coefficients as NSS tool. 
+(5)[MagNet](https://arxiv.org/abs/1705.09064): This method detects adversarial samples by assessing the ability to reconstruct normal samples while being unable to reconstruct adversarial samples. The AEs can be easily distinguished from those of normal samples using MSCN coefficients as NSS tool [5]. 
 
-(6)[NIC](https://www.cs.purdue.edu/homes/taog/docs/NDSS19.pdf): This method propose a novel technique to extract DNN invariants and use them to perform runtime adversarial sample detection. 
+(6)[NIC](https://www.cs.purdue.edu/homes/taog/docs/NDSS19.pdf): This method propose a novel technique to extract DNN invariants and use them to perform runtime adversarial sample detection [6]. 
 
-(7)[MultiLID](https://arxiv.org/pdf/2212.06776): Based on a re-interpretation of the LID measure and several simple adaptations, this method surpass the state-of-the-art on adversarial detection.
+(7)[MultiLID](https://arxiv.org/pdf/2212.06776): Based on a re-interpretation of the LID measure and several simple adaptations, this method surpass the state-of-the-art on adversarial detection [7].
 
 ## Setting Paths
 Open `setup_paths.py` and configure the paths and other settings for the detection methods.
@@ -51,3 +51,20 @@ In this website, we only report the detection rate (DR). Other performance resul
 | adversarial patch             | 52.43  | 64.11  | 87.39  | 48.67 | 80.15     | 94.58  | 99.76       |
 
 ## Citation
+
+## References
+[1] Feinman R, Curtin R R, Shintre S, et al. Detecting adversarial samples from artifacts [J]. arXiv preprint arXiv:170300410, 2017.
+
+[2] Ma X, Li B, Wang Y, et al. Characterizing Adversarial Subspaces Using Local Intrinsic Dimensionality[C]//International Conference on Learning Representations, 2018.
+
+[3] Kherchouche A, Fezza S A, Hamidouche W, et al. Detection of adversarial examples in deep neural networks with natural scene statistics[C]//2020 International Joint Conference on Neural Networks (IJCNN). IEEE, 2020: 1-7.
+
+[4] Xu W, Evans D, Qi Y. Feature squeezing: Detecting adversarial examples in deep neural networks [J]. arXiv preprint arXiv:170401155, 2017.
+
+[5] Meng D, Chen H. Magnet: a two-pronged defense against adversarial examples[C]// Proceedings of the 2017 ACM SIGSAC conference on computer and communications security, 2017.
+
+[6] Ma S, Liu Y, Tao G, et al. Nic: Detecting adversarial samples with neural network invariant checking[C]// 26th Annual Network And Distributed System Security Symposium (NDSS 2019), 2019. Internet Soc.
+
+[7] Lorenz P, Keuper M, Keuper J. Unfolding Local Growth Rate Estimates for (Almost) Perfect Adversarial Detection[J]. arXiv preprint arXiv:2212.06776, 2022.
+
+
