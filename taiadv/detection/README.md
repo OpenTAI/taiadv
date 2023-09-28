@@ -1,4 +1,4 @@
-![image](https://github.com/OpenTAI/taiadv/assets/66816775/e4216498-ea61-4a9c-9887-304928903324)![image](https://github.com/OpenTAI/taiadv/assets/66816775/83653ecf-5d91-4a92-87df-ca25521e48ff)# Adversarial-Example-Detection
+# Adversarial-Example-Detection
 This is a project for detecting adversarial examples. It supports the MNIST, CIFAR-10, and SVHN datasets, and currently includes detection methods such as KDE, LID, NSS, FS, Magnet, NIC, and MultiLID.
 
 Attack method: fgsm, bim, pgd, cw, deepfool, spatial transofrmation attack, square attack, adversarial patch
