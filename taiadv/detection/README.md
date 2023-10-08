@@ -35,21 +35,21 @@ In this website, we only report the detection rate (DR). Other performance resul
 ##
 Attack method: 
 
-[1]FGSM:
+[1]FGSM<sup>[8]</sup>:
 
-[2]BIM:
+[2]BIM<sup>[9]</sup>:
 
-[3]PGD:
+[3]PGD<sup>[10]</sup>:
 
-[4]CW:
+[4]CW<sup>[11]</sup>:
 
-[5]DeepFool:
+[5]DeepFool<sup>[12]</sup>:
 
-[6]Spatial Transofrmation Attack:
+[6]Spatial Transofrmation Attack<sup>[13]</sup>:
 
-[7]Square Attack:
+[7]Square Attack<sup>[14]</sup>:
 
-[8]Adversarial Patch:
+[8]Adversarial Patch<sup>[15]</sup>:
 
 Detect method: 
 
@@ -82,4 +82,18 @@ Detect method:
 
 [7] Lorenz P, Keuper M, Keuper J. Unfolding Local Growth Rate Estimates for (Almost) Perfect Adversarial Detection[J]. arXiv preprint arXiv:2212.06776, 2022.
 
+[8] Goodfellow I J, Shlens J, Szegedy C. Explaining and harnessing adversarial examples[C]//International Conference on Learning Representations, 2015.
 
+[9] Kurakin A, Goodfellow I J, Bengio S. Adversarial Examples in the Physical World[J]. Artificial Intelligence Safety and Security, 2018: 99-112.
+
+[10] Madry A, Makelov A, Schmidt L, et al. Towards deep learning models resistant to adversarial attacks[C]//International Conference on Learning Representations, 2018.
+
+[11] Carlini N, Wagner D. Towards evaluating the robustness of neural networks[C]//2017 ieee symposium on security and privacy (sp). Ieee, 2017: 39-57.
+
+[12] Moosavi-Dezfooli S M, Fawzi A, Frossard P. Deepfool: a simple and accurate method to fool deep neural networks[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2016: 2574-2582.
+
+[13] Engstrom L, Tran B, Tsipras D, et al. Exploring the landscape of spatial robustness[C]//International Conference on Learning Representations, 2019.
+
+[14] Andriushchenko M, Croce F, Flammarion N, et al. Square attack: a query-efficient black-box adversarial attack via random search[C]//European Conference on Computer Vision, 2020.
+
+[15] Brown T B, Mané D, Roy A, et al. Adversarial patch[J]. arXiv preprint arXiv:1712.09665, 2017.
