@@ -4,10 +4,10 @@ This project is designed for detecting adversarial examples and supports the MNI
 ## Setting Paths
 Open `setup_paths.py` and configure the paths and other settings for the detection methods.
 
-## Train model
+## Train Model
 To train a model, run `train_model.py -d=<dataset> -b=<batch_size> -e=<epochs>`.
 
-## Generate adversarial example
+## Generate Adversarial Example
 To generate adversarial examples, run `generate_adv.py -d=<dataset>`. After running the program, adversarial examples will be automatically generated and saved for subsequent detection.After running the program, adversarial examples will be automatically generated and saved for subsequent detection. Additionally, the perturbation for Linf are `epsilons = [8/256, 16/256, 32/256, 64/256, 80/256, 128/256]`, for L1 are `epsilons1 = [5, 10, 15, 20, 25, 30, 40]`, and for L2 are `epsilons2 = [0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]`.
 
 ## Detector
