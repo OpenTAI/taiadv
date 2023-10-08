@@ -35,21 +35,21 @@ In this website, we only report the detection rate (DR). Other performance resul
 ## Background and Related Work
 Attack method: 
 
-[1]FGSM<sup>[8]</sup>:
+(1)FGSM<sup>[8]</sup>:
 
-[2]BIM<sup>[9]</sup>:
+(2)BIM<sup>[9]</sup>:
 
-[3]PGD<sup>[10]</sup>:
+(3)PGD<sup>[10]</sup>:
 
-[4]CW<sup>[11]</sup>:
+(4)CW<sup>[11]</sup>:
 
-[5]DeepFool<sup>[12]</sup>:
+(5)DeepFool<sup>[12]</sup>:
 
-[6]Spatial Transofrmation Attack<sup>[13]</sup>:
+(6)Spatial Transofrmation Attack<sup>[13]</sup>:
 
-[7]Square Attack<sup>[14]</sup>:
+(7)Square Attack<sup>[14]</sup>:
 
-[8]Adversarial Patch<sup>[15]</sup>:
+(8)Adversarial Patch<sup>[15]</sup>:
 
 Detect method: 
 
