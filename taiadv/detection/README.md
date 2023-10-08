@@ -1,7 +1,7 @@
 # Adversarial-Example-Detection
 This is a project for detecting adversarial examples. It supports the MNIST, CIFAR-10, and SVHN datasets, and currently includes detection methods such as KDE[1], LID[2], NSS[3], FS[4], Magnet[5], NIC[6], and MultiLID[7].
 
-Attack method: fgsm, bim, pgd, cw, deepfool, spatial transofrmation attack, square attack, adversarial patch
+Attack method: FGSM, BIM, PGD, CW, DeepFool, Spatial Transofrmation Attack, Square Attack, Adversarial Patch
 
 Detect method: 
 
@@ -33,23 +33,22 @@ To run all the detector, just execute `run_detectors.py`. If you want to run a s
 
 ## Results
 In this website, we only report the detection rate (DR). Other performance results, like TP, TN, FP, and FN, can be accquired from the genenerated CSV file for each detector, by execute `collect_results.py`
-| Attack                        | KDE    | LID    | NSS    | FS    | MagNet    | NIC    | MultiLID    |
-|-------------------------------|--------|--------|--------|-------|-----------|--------|-------------|
-| fgsm_0.03125                  | 66.47  | 50.0   | 84.33  | 52.51 | 69.58     | 94.32  | 92.81       |
-| fgsm_0.0625                   | 63.96  | 78.98  | 92.87  | 49.84 | 94.31     | 94.79  | 93.46       |
-| fgsm_0.125                    | 61.44  | 83.97  | 92.85  | 49.27 | 94.33     | 94.82  | 93.86       |
-| bim_0.03125                   | 69.43  | 50.11  | 67.42  | 93.18 | 52.25     | 90.55  | 92.9        |
-| bim_0.0625                    | 69.05  | 66.21  | 86.82  | 93.98 | 93.93     | 92.37  | 93.54       |
-| bim_0.125                     | 69.01  | 92.1   | 92.6   | 93.99 | 94.11     | 94.44  | 94.05       |
-| pgdi_0.03125                  | 71.04  | 50.11  | 69.85  | 93.81 | 53.52     | 90.72  | 92.86       |
-| pgdi_0.0625                   | 70.95  | 68.06  | 89.41  | 93.99 | 94.08     | 94.07  | 93.59       |
-| pgdi_0.125                    | 70.37  | 92.83  | 92.78  | 93.99 | 94.11     | 94.68  | 94.46       |
-| cwi                           | 75.34  | 50.0   | 51.73  | 48.16 | 50.28     | 87.74  | 98.02       |
-| deepfool                      | 81.68  | 50.0   | 50.44  | 48.35 | 50.05     | 93.11  | 98.06       |
-| spatial transofrmation attack | 68.88  | 83.77  | 78.01  | 47.71 | 52.41     | 91.33  | 99.67       |
-| square attack                 | 75.36  | 80.76  | 48.89  | 47.72 | 98.52     | 94.67  | 99.22       |
-| adversarial patch             | 52.43  | 64.11  | 87.39  | 48.67 | 80.15     | 94.58  | 99.76       |
-
+| Attack                        | Parameters       | KDE   | LID   | NSS   | FS    | MagNet | NIC   | MultiLID |
+|-------------------------------|------------------|-------|-------|-------|-------|--------|-------|----------|
+| FGSM                          | Linf(eps=8/256)  | 66.47 | 50.0  | 84.33 | 52.51 | 51.62  | 94.32 | 92.81    |
+| FGSM                          | Linf(eps=16/256) | 63.96 | 78.98 | 92.87 | 49.84 | 94.26  | 94.79 | 93.46    |
+| FGSM                          | Linf(eps=32/256) | 61.44 | 83.97 | 92.85 | 49.27 | 94.35  | 94.82 | 93.86    |
+| BIM                           | Linf(eps=8/256)  | 69.43 | 50.11 | 67.42 | 93.18 | 50.45  | 90.55 | 92.9     |
+| BIM                           | Linf(eps=16/256) | 69.05 | 66.21 | 86.82 | 93.98 | 65.38  | 92.37 | 93.54    |
+| BIM                           | Linf(eps=32/256) | 69.01 | 92.1  | 92.6  | 93.99 | 94.15  | 94.44 | 94.05    |
+| PGD                           | Linf(eps=8/256)  | 71.04 | 50.11 | 69.85 | 93.81 | 50.62  | 90.72 | 92.86    |
+| PGD                           | Linf(eps=16/256) | 70.95 | 68.06 | 89.41 | 93.99 | 92.56  | 94.07 | 93.59    |
+| PGD                           | Linf(eps=32/256) | 70.37 | 92.83 | 92.78 | 93.99 | 94.15  | 94.68 | 94.46    |
+| CW                            | Linf             | 75.34 | 50.0  | 51.73 | 48.16 | 50.08  | 87.74 | 98.02    |
+| DeepFool                      | L2               | 81.68 | 50.0  | 50.44 | 48.35 | 50.02  | 93.11 | 98.06    |
+| Spatial Transofrmation Attack | -                | 68.88 | 83.77 | 78.01 | 47.71 | 50.67  | 91.33 | 99.67    |
+| Square Attack                 | Linf             | 75.36 | 80.76 | 48.89 | 47.72 | 98.58  | 94.67 | 99.22    |
+| Adversarial Patch             | -                | 52.43 | 64.11 | 87.39 | 48.67 | 57.97  | 94.58 | 99.76    |
 ## Citation
 
 ## References
