@@ -5,19 +5,19 @@ Attack method: FGSM, BIM, PGD, CW, DeepFool, Spatial Transofrmation Attack, Squa
 
 Detect method: 
 
-(1)[KDE](https://arxiv.org/pdf/1703.00410)<sup>1</sup>: KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
+(1)[KDE](https://arxiv.org/pdf/1703.00410)<sup>[1]</sup>: KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
 
-(2)[LID](https://arxiv.org/pdf/1801.02613)[^2]: This method extracts features from each intermediate layer of a deep neural network and employs the Local Intrinsic Dimensionality metric to detect adversarial samples.
+(2)[LID](https://arxiv.org/pdf/1801.02613)<sup>[2]</sup>: This method extracts features from each intermediate layer of a deep neural network and employs the Local Intrinsic Dimensionality metric to detect adversarial samples.
 
-(3)[NSS](https://ieeexplore.ieee.org/document/9206959)[^3]: This method propose to characterize the AEs through the use of natural scene statistics.
+(3)[NSS](https://ieeexplore.ieee.org/document/9206959)<sup>[3]</sup>: This method propose to characterize the AEs through the use of natural scene statistics.
 
-(4)[FS](https://arxiv.org/abs/1704.01155)[^4]: This method employs feature squeezing to reduce the dimensionality of input samples and then detects adversarial samples based on the changes in the model's output before and after compression.
+(4)[FS](https://arxiv.org/abs/1704.01155)<sup>[4]</sup>: This method employs feature squeezing to reduce the dimensionality of input samples and then detects adversarial samples based on the changes in the model's output before and after compression.
 
-(5)[MagNet](https://arxiv.org/abs/1705.09064)[^5]: This method detects adversarial samples by assessing the ability to reconstruct normal samples while being unable to reconstruct adversarial samples. The AEs can be easily distinguished from those of normal samples using MSCN coefficients as NSS tool. 
+(5)[MagNet](https://arxiv.org/abs/1705.09064)<sup>[5]</sup>: This method detects adversarial samples by assessing the ability to reconstruct normal samples while being unable to reconstruct adversarial samples. The AEs can be easily distinguished from those of normal samples using MSCN coefficients as NSS tool. 
 
-(6)[NIC](https://www.cs.purdue.edu/homes/taog/docs/NDSS19.pdf)[^6]: This method propose a novel technique to extract DNN invariants and use them to perform runtime adversarial sample detection. 
+(6)[NIC](https://www.cs.purdue.edu/homes/taog/docs/NDSS19.pdf)<sup>[6]</sup>: This method propose a novel technique to extract DNN invariants and use them to perform runtime adversarial sample detection. 
 
-(7)[MultiLID](https://arxiv.org/pdf/2212.06776)[^7]: Based on a re-interpretation of the LID measure and several simple adaptations, this method surpass the state-of-the-art on adversarial detection.
+(7)[MultiLID](https://arxiv.org/pdf/2212.06776)<sup>[7]</sup>: Based on a re-interpretation of the LID measure and several simple adaptations, this method surpass the state-of-the-art on adversarial detection.
 
 ## Setting Paths
 Open `setup_paths.py` and configure the paths and other settings for the detection methods.
