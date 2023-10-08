@@ -5,7 +5,7 @@ Attack method: FGSM, BIM, PGD, CW, DeepFool, Spatial Transofrmation Attack, Squa
 
 Detect method: 
 
-(1)[KDE](https://arxiv.org/pdf/1703.00410)[^1]: KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
+(1)[KDE](https://arxiv.org/pdf/1703.00410)<sup>1</sup>: KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
 
 (2)[LID](https://arxiv.org/pdf/1801.02613)[^2]: This method extracts features from each intermediate layer of a deep neural network and employs the Local Intrinsic Dimensionality metric to detect adversarial samples.
 
