@@ -10,7 +10,7 @@ To train a model, run `train_model.py -d=<dataset> -b=<batch_size> -e=<epochs>`.
 ## Generate adversarial example
 To generate adversarial examples, run `generate_adv.py -d=<dataset>`. After running the program, adversarial examples will be automatically generated and saved for subsequent detection.After running the program, adversarial examples will be automatically generated and saved for subsequent detection. Additionally, the perturbation for Linf are `epsilons = [8/256, 16/256, 32/256, 64/256, 80/256, 128/256]`, for L1 are `epsilons1 = [5, 10, 15, 20, 25, 30, 40]`, and for L2 are `epsilons2 = [0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]`.
 
-## Detection
+## Detector
 To run all the detector, just execute `run_detectors.py`. If you want to run a specific detection method, execute `detect_{method_name}.py -d=<dataset>`, replacing {method_name} with the name of the method you wish to run. For example, `detect_multiLID.py -d=cifar`.
 
 ## Results
@@ -32,7 +32,7 @@ In this website, we only report the detection rate (DR). Other performance resul
 | Square Attack                 | Linf             | 75.36 | 80.76 | 48.89 | 47.72 | 98.58  | 94.67 | 99.22    |
 | Adversarial Patch             | -                | 52.43 | 64.11 | 87.39 | 48.67 | 57.97  | 94.58 | 99.76    |
 
-##
+## Background and Related Work
 Attack method: 
 
 [1]FGSM<sup>[8]</sup>:
