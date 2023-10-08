@@ -3,6 +3,8 @@ This is a project for detecting adversarial examples. It supports the MNIST, CIF
 
 Attack method: FGSM, BIM, PGD, CW, DeepFool, Spatial Transofrmation Attack, Square Attack, Adversarial Patch
 
+Detect method: -> Detection Methods:
+
 Detect method: 
 
 (1)[KDE](https://arxiv.org/pdf/1703.00410): KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
@@ -49,7 +51,6 @@ In this website, we only report the detection rate (DR). Other performance resul
 | Spatial Transofrmation Attack | -                | 68.88 | 83.77 | 78.01 | 47.71 | 50.67  | 91.33 | 99.67    |
 | Square Attack                 | Linf             | 75.36 | 80.76 | 48.89 | 47.72 | 98.58  | 94.67 | 99.22    |
 | Adversarial Patch             | -                | 52.43 | 64.11 | 87.39 | 48.67 | 57.97  | 94.58 | 99.76    |
-## Citation
 
 ## References
 [1] Feinman R, Curtin R R, Shintre S, et al. Detecting adversarial samples from artifacts [J]. arXiv preprint arXiv:170300410, 2017.
