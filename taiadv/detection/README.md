@@ -32,7 +32,7 @@ In this website, we only report the detection rate (DR). Other performance resul
 | Square Attack                 | Linf             | 75.36 | 80.76 | 48.89 | 47.72 | 98.58  | 94.67 | 99.22    |
 | Adversarial Patch             | -                | 52.43 | 64.11 | 87.39 | 48.67 | 57.97  | 94.58 | 99.76    |
 
-## Background and Related Work
+## Attack & Detection Method
 Attack method: 
 
 (1)FGSM<sup>[8]</sup>:
@@ -51,7 +51,7 @@ Attack method:
 
 (8)Adversarial Patch<sup>[15]</sup>:
 
-Detect method: 
+Detection method: 
 
 (1)[KDE](https://arxiv.org/pdf/1703.00410)<sup>[1]</sup>: KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
 
