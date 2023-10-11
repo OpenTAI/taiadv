@@ -1,4 +1,4 @@
-# Adversarial-Example-Detection
+# An open-source toolkit for Adversarial Example Detection (AED)
 This project is designed for detecting adversarial examples and supports the MNIST, CIFAR-10, and SVHN datasets. It currently incorporates various detection methods, including KDE, LID, NSS, FS, Magnet, NIC, and MultiLID.
 
 ## Setting Paths
