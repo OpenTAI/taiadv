@@ -14,7 +14,7 @@ To generate adversarial examples, run `generate_adv.py -d=<dataset>`. After runn
 To run all the detectors, just execute `run_detectors.py`. If you want to run a specific detection method, execute `detect_{method_name}.py -d=<dataset>`, replacing {method_name} with the name of the method you wish to run. For example, `detect_multiLID.py -d=cifar`.
 
 ### Results
-Here, we only report the detection rate (DR). Other performance results, like TP, TN, FP, and FN, can be acquired from the generated CSV file for each detector, by executing `collect_results.py`
+Here, we only report the detection rate (DR, %). Other performance results, like TP, TN, FP, and FN, can be acquired from the generated CSV file for each detector, by executing `collect_results.py`
 | Attack                        | Parameters       | KDE   | LID   | NSS   | FS    | MagNet | NIC   | MultiLID |
 |-------------------------------|------------------|-------|-------|-------|-------|--------|-------|----------|
 | FGSM                          | $L_{\infty}$(ϵ=8/256)  | 66.47 | 50.0  | 84.33 | 52.51 | 51.62  | 94.32 | 92.81    |
