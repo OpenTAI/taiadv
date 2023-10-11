@@ -1,19 +1,19 @@
-# An open-source toolkit for Adversarial Example Detection (AED)
+## An open-source toolkit for Adversarial Example Detection (AED)
 This repo implements a set of detection methods for adversarial example detection (AED). So far, it supports experiments on MNIST, CIFAR-10, and SVHN datasets with 7 detection methods: KDE, LID, NSS, FS, Magnet, NIC, and MultiLID. A brief description and reference of these methods can be found below. 
 
-## Setting Paths
+### Setting Paths
 Open `setup_paths.py` and configure the paths and other settings for the detection methods.
 
-## Train Model
+### Train Model
 To train a model, run `train_model.py -d=<dataset> -b=<batch_size> -e=<epochs>`.
 
-## Generate Adversarial Example
+### Generate Adversarial Example
 To generate adversarial examples, run `generate_adv.py -d=<dataset>`. After running the program, adversarial examples will be automatically generated and saved for subsequent detection. After running the program, adversarial examples will be automatically generated and saved for subsequent detection. Additionally, the perturbation for $L_{\infty}$ are `epsilons = [8/256, 16/256, 32/256, 64/256, 80/256, 128/256]`, for L1 are `epsilons1 = [5, 10, 15, 20, 25, 30, 40]`, and for L2 are `epsilons2 = [0.125, 0.25, 0.3125, 0.5, 1, 1.5, 2]`.
 
-## Detector
+### Detector
 To run all the detectors, just execute `run_detectors.py`. If you want to run a specific detection method, execute `detect_{method_name}.py -d=<dataset>`, replacing {method_name} with the name of the method you wish to run. For example, `detect_multiLID.py -d=cifar`.
 
-## Results
+### Results
 Here, we only report the detection rate (DR). Other performance results, like TP, TN, FP, and FN, can be acquired from the generated CSV file for each detector, by executing `collect_results.py`
 | Attack                        | Parameters       | KDE   | LID   | NSS   | FS    | MagNet | NIC   | MultiLID |
 |-------------------------------|------------------|-------|-------|-------|-------|--------|-------|----------|
@@ -32,40 +32,40 @@ Here, we only report the detection rate (DR). Other performance results, like TP
 | Square Attack                 | $L_{\infty}$                    | 75.36 | 80.76 | 48.89 | 47.72 | 98.58  | 94.67 | 99.22    |
 | Adversarial Patch             | -                                 | 52.43 | 64.11 | 87.39 | 48.67 | 57.97  | 94.58 | 99.76    |
 
-## Attack & Detection Method
-Attack method: 
+### Attack & Detection Methods
+Attack methods: 
 
-(1)FGSM<sup>[8]</sup>:
+1. FGSM<sup>[8]</sup>:
 
-(2)BIM<sup>[9]</sup>:
+2. BIM<sup>[9]</sup>:
 
-(3)PGD<sup>[10]</sup>:
+3. PGD<sup>[10]</sup>:
 
-(4)CW<sup>[11]</sup>:
+4. CW<sup>[11]</sup>:
 
-(5)DeepFool<sup>[12]</sup>:
+5. DeepFool<sup>[12]</sup>:
 
-(6)Spatial Transformation Attack<sup>[13]</sup>:
+6. Spatial Transformation Attack<sup>[13]</sup>:
 
-(7)Square Attack<sup>[14]</sup>:
+7. Square Attack<sup>[14]</sup>:
 
-(8)Adversarial Patch<sup>[15]</sup>:
+8. Adversarial Patch<sup>[15]</sup>:
 
-Detection method: 
+Detection methods: 
 
-(1)[KDE](https://arxiv.org/pdf/1703.00410)<sup>[1]</sup>: KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
+1. [KDE](https://arxiv.org/pdf/1703.00410)<sup>[1]</sup>: KDE reveals that adversarial samples tend to deviate from the normal data manifold in the deep space, resulting in relatively lower kernel densities.
 
-(2)[LID](https://arxiv.org/pdf/1801.02613)<sup>[2]</sup>: This method extracts features from each intermediate layer of a deep neural network and employs the Local Intrinsic Dimensionality metric to detect adversarial samples.
+2. [LID](https://arxiv.org/pdf/1801.02613)<sup>[2]</sup>: This method extracts features from each intermediate layer of a deep neural network and employs the Local Intrinsic Dimensionality metric to detect adversarial samples.
 
-(3)[NSS](https://ieeexplore.ieee.org/document/9206959)<sup>[3]</sup>: This method proposes to characterize the AEs through the use of natural scene statistics.
+3. [NSS](https://ieeexplore.ieee.org/document/9206959)<sup>[3]</sup>: This method proposes to characterize the AEs through the use of natural scene statistics.
 
-(4)[FS](https://arxiv.org/abs/1704.01155)<sup>[4]</sup>: This method employs feature squeezing to reduce the dimensionality of input samples and then detects adversarial samples based on the changes in the model's output before and after compression.
+4. [FS](https://arxiv.org/abs/1704.01155)<sup>[4]</sup>: This method employs feature squeezing to reduce the dimensionality of input samples and then detects adversarial samples based on the changes in the model's output before and after compression.
 
-(5)[MagNet](https://arxiv.org/abs/1705.09064)<sup>[5]</sup>: This method detects adversarial samples by assessing the ability to reconstruct normal samples while being unable to reconstruct adversarial samples. The AEs can be easily distinguished from those of normal samples using MSCN coefficients as the NSS tool. 
+5. [MagNet](https://arxiv.org/abs/1705.09064)<sup>[5]</sup>: This method detects adversarial samples by assessing the ability to reconstruct normal samples while being unable to reconstruct adversarial samples. The AEs can be easily distinguished from those of normal samples using MSCN coefficients as the NSS tool. 
 
-(6)[NIC](https://www.cs.purdue.edu/homes/taog/docs/NDSS19.pdf)<sup>[6]</sup>: This method proposes a novel technique to extract DNN invariants and use them to perform runtime adversarial sample detection. 
+6. [NIC](https://www.cs.purdue.edu/homes/taog/docs/NDSS19.pdf)<sup>[6]</sup>: This method proposes a novel technique to extract DNN invariants and use them to perform runtime adversarial sample detection. 
 
-(7)[MultiLID](https://arxiv.org/pdf/2212.06776)<sup>[7]</sup>: Based on a re-interpretation of the LID measure and several simple adaptations, this method surpasses the state-of-the-art on adversarial detection.
+7. [MultiLID](https://arxiv.org/pdf/2212.06776)<sup>[7]</sup>: Based on a re-interpretation of the LID measure and several simple adaptations, this method surpasses the state-of-the-art on adversarial detection.
 
 ## References
 [1] Feinman R, Curtin R R, Shintre S, et al. Detecting adversarial samples from artifacts [J]. arXiv preprint arXiv:170300410, 2017.
