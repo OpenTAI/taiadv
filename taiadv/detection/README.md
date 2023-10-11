@@ -17,8 +17,8 @@ To run all the detector, just execute `run_detectors.py`. If you want to run a s
 In this website, we only report the detection rate (DR). Other performance results, like TP, TN, FP, and FN, can be accquired from the genenerated CSV file for each detector, by execute `collect_results.py`
 | Attack                        | Parameters       | KDE   | LID   | NSS   | FS    | MagNet | NIC   | MultiLID |
 |-------------------------------|------------------|-------|-------|-------|-------|--------|-------|----------|
-| FGSM                          | Linf(eps=8/256)  | 66.47 | 50.0  | 84.33 | 52.51 | 51.62  | 94.32 | 92.81    |
-| FGSM                          | Linf(eps=16/256) | 63.96 | 78.98 | 92.87 | 49.84 | 94.26  | 94.79 | 93.46    |
+| FGSM                          | $L_{infty}$(eps=8/256)  | 66.47 | 50.0  | 84.33 | 52.51 | 51.62  | 94.32 | 92.81    |
+| FGSM                          | $L_{infty}$(eps=16/256) | 63.96 | 78.98 | 92.87 | 49.84 | 94.26  | 94.79 | 93.46    |
 | FGSM                          | Linf(eps=32/256) | 61.44 | 83.97 | 92.85 | 49.27 | 94.35  | 94.82 | 93.86    |
 | BIM                           | Linf(eps=8/256)  | 69.43 | 50.11 | 67.42 | 93.18 | 50.45  | 90.55 | 92.9     |
 | BIM                           | Linf(eps=16/256) | 69.05 | 66.21 | 86.82 | 93.98 | 65.38  | 92.37 | 93.54    |
