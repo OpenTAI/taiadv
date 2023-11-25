@@ -35,21 +35,21 @@ Here, we only report the detection rate (DR, %). Other performance results, like
 ### Attack & Detection Methods
 Attack methods: 
 
-1. FGSM<sup>[8]</sup>:
+1. FGSM<sup>[8]</sup>: a one-step gradient sign attack method. **[one-step attack]** 
 
-2. BIM<sup>[9]</sup>:
+2. BIM<sup>[9]</sup>:  an iterative multi-step attack method with equally divided step size. **[multi-step attack]**
 
-3. PGD<sup>[10]</sup>:
+3. PGD<sup>[10]</sup>:   an interactive attack method with uniform initialization, large step size, and perturbation projection. **[the strongest first-order attack]**
 
-4. CW<sup>[11]</sup>:
+4. CW<sup>[11]</sup>: an optimization-based attack framework that minimize the L2 perturbation magnitude, while targetting maximum classification error. **[L2 optimization attack]**
 
-5. DeepFool<sup>[12]</sup>:
+5. DeepFool<sup>[12]</sup>: a decision boundary based attack with adaptive perturabtion. **[boundary attack]**
 
-6. Spatial Transformation Attack<sup>[13]</sup>:
+6. Spatial Transformation Attack<sup>[13]</sup>: spatially transform the samples to be adversarial, different from other attacks that perturb the pixel values. **[spatial attack]**
 
-7. Square Attack<sup>[14]</sup>:
+7. Square Attack<sup>[14]</sup>: a score-based black-box L2 adversarial attack that selects localized square-shaped updates at random positions at each iteration. **[black-box attack]**
 
-8. Adversarial Patch<sup>[15]</sup>:
+8. Adversarial Patch<sup>[15]</sup>: a patch with large adversarial perturbations attached to a random square/round area of the image. **[pyshical attack]**
 
 Detection methods: 
 
