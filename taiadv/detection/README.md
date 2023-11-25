@@ -14,23 +14,7 @@ To generate adversarial examples, run `generate_adv.py -d=<dataset>`. After runn
 To run all the detectors, just execute `run_detectors.py`. If you want to run a specific detection method, execute `detect_{method_name}.py -d=<dataset>`, replacing {method_name} with the name of the method you wish to run. For example, `detect_multiLID.py -d=cifar`.
 
 ### Results
-Here, we only report the detection rate (DR, %). Other performance results, like TP, TN, FP, and FN, can be acquired from the generated CSV file for each detector, by executing `collect_results.py`
-| Attack                        | Parameters       | KDE   | LID   | NSS   | FS    | MagNet | NIC   | MultiLID |
-|-------------------------------|------------------|-------|-------|-------|-------|--------|-------|----------|
-| FGSM                          | $L_{\infty}$(ϵ=8/256)  | 75.82 | 62.57 | 92.7  | 63.27 | 94.49  | 100   | 97.58    |
-| FGSM                          | $L_{\infty}$(ϵ=16/256) | 63.96 | 78.98 | 92.87 | 49.84 | 94.26  | 94.79 | 93.46    |
-| FGSM                          | $L_{\infty}$(ϵ=32/256) | 61.44 | 83.97 | 92.85 | 49.27 | 94.35  | 94.82 | 93.86    |
-| BIM                           | $L_{\infty}$(ϵ=8/256)  | 69.43 | 50.11 | 67.42 | 93.18 | 50.45  | 90.55 | 92.9     |
-| BIM                           | $L_{\infty}$(ϵ=16/256) | 69.05 | 66.21 | 86.82 | 93.98 | 65.38  | 92.37 | 93.54    |
-| BIM                           | $L_{\infty}$(ϵ=32/256) | 69.01 | 92.1  | 92.6  | 93.99 | 94.15  | 94.44 | 94.05    |
-| PGD                           | $L_{\infty}$(ϵ=8/256)  | 71.04 | 50.11 | 69.85 | 93.81 | 50.62  | 90.72 | 92.86    |
-| PGD                           | $L_{\infty}$(ϵ=16/256) | 70.95 | 68.06 | 89.41 | 93.99 | 92.56  | 94.07 | 93.59    |
-| PGD                           | $L_{\infty}$(ϵ=32/256) | 70.37 | 92.83 | 92.78 | 93.99 | 94.15  | 94.68 | 94.46    |
-| CW                            | $L_{\infty}$                    | 75.34 | 50.0  | 51.73 | 48.16 | 50.08  | 87.74 | 98.02    |
-| DeepFool                      | $L_2$                           | 81.68 | 50.0  | 50.44 | 48.35 | 50.02  | 93.11 | 98.06    |
-| Spatial Transofrmation Attack | -                               | 68.88 | 83.77 | 78.01 | 47.71 | 50.67  | 91.33 | 99.67    |
-| Square Attack                 | $L_{\infty}$                    | 75.36 | 80.76 | 48.89 | 47.72 | 98.58  | 94.67 | 99.22    |
-| Adversarial Patch             | -                                 | 52.43 | 64.11 | 87.39 | 48.67 | 57.97  | 94.58 | 99.76    |
+Here, we only report the Area Under Curve (AUC, %). Other performance results, like ACC, TP, TN, FP, and FN, can be acquired from the generated CSV file for each detector, by executing `collect_results.py`
 
 （1）CIFAR10
 | Attack                        | Parameters            | KDE   | LID   | NSS   | FS    | MagNet | NIC   | MultiLID |
@@ -64,7 +48,7 @@ Here, we only report the detection rate (DR, %). Other performance results, like
 | PGD             | $L_{\infty}$(ϵ=32/256) | 59.31 | 97.11 | 100   | 100   | 99.52  | 100   | 99.69    |
 | CW              | $L_{\infty}$           | 71.5  | 53.67 | 67.23 | 84.27 | 55.95  | 100   | 99.63    |
 | DeepFool        | $L_2$                  | 71.42 | 51.96 | 49.8  | 78.04 | 51.6   | 100   | 99.63    |
-| STA             | -                      | 77.22 | 97.59 | 99.99 | 73.55 | 92.74  | 100   | 99.66    |
+| Spatial Transformation Attack             | -                      | 77.22 | 97.59 | 99.99 | 73.55 | 92.74  | 100   | 99.66    |
 | Square Attack   | $L_{\infty}$           | 77.19 | 84.62 | 65.71 | 95.41 | 99.61  | 100   | 99.71    |
 | Adversarial Patch | -                    | 41.77 | 74.92 | 99.99 | 74.63 | 92.97  | 100   | 99.69    |
 
