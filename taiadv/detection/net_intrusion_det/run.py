@@ -177,8 +177,7 @@ y_pred = model_lr.predict(test_x)
 y_pred_proba_lr = model_lr.predict_proba(test_x)[:, 1]  # 获取正类的预测概率
 
 # 计算AUC
-auc_lr = roc_auc_score(test_y, y_pred_proba_lr)
-print('Logistic Regression AUC: ', auc_lr)
+print('Logistic Regression AUC: ', roc_auc_score(test_y, y_pred_proba_lr))
 
 
 print(accuracy_score(test_y, y_pred))
@@ -193,23 +192,27 @@ plt.show()
 
 
 
-### Neural Network
-model_nn = MLPClassifier(solver='adam', max_iter=1000, hidden_layer_sizes = (10,5))
+# ### Neural Network
+# model_nn = MLPClassifier(solver='adam', max_iter=1000, hidden_layer_sizes = (10,5))
 
-start = time.time()
-model_nn.fit(train_x, train_y)
-end = time.time()
-print('Training time: ' + str(round(end-start, 2)) + ' sec')
+# start = time.time()
+# model_nn.fit(train_x, train_y)
+# end = time.time()
+# print('Training time: ' + str(round(end-start, 2)) + ' sec')
 
-y_pred = model_nn.predict(test_x)
+# y_pred = model_nn.predict(test_x)
+# y_pred_proba_lr_nn = model_lr.predict_proba(test_x)[:, 1]  # 获取正类的预测概率
 
-print(accuracy_score(test_y, y_pred))
+# # 计算AUC
+# print('Neural Network AUC: ', roc_auc_score(test_y, y_pred_proba_lr_nn))
 
-#Classification report
-print(classification_report(test_y,y_pred,target_names = ['normal','attack']))
+# print(accuracy_score(test_y, y_pred))
 
-#confusion matrix
-ConfusionMatrixDisplay.from_predictions(test_y, y_pred,display_labels = ['normal','attack'])
-plt.show()
+# #Classification report
+# print(classification_report(test_y,y_pred,target_names = ['normal','attack']))
+
+# #confusion matrix
+# ConfusionMatrixDisplay.from_predictions(test_y, y_pred,display_labels = ['normal','attack'])
+# plt.show()
 
 
