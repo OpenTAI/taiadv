@@ -52,6 +52,12 @@ Here, we only report the Area Under Curve (AUC, %). Other performance results, l
 | Square Attack   | $L_{\infty}$           | 77.19 | 84.62 | 65.71 | 95.41 | 99.61  | 100   | 99.71    |
 | Adversarial Patch | -                    | 41.77 | 74.92 | 99.99 | 74.63 | 92.97  | 100   | 99.69    |
 
+（3）UNSWNB15
+| Attack          | Parameters             | Logistic Regression   | 
+|-----------------|------------------------|-------|
+| Net Intrusion            | -  | 96.89  |
+
+
 
 ### Attack & Detection Methods
 Attack methods: 
