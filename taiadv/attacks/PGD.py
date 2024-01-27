@@ -1,46 +1,36 @@
-# Copyright (c) OpenTAI. All rights reserved.
+import time
+import sys
 import torch
-import torch.nn.functional as F
 import torch.optim as optim
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
 from torch.autograd import Variable
-
 from .utils import adv_check_and_update, one_hot_tensor
 
 
 def cw_loss(logits, y):
-    correct_logit = torch.sum(
-        torch.gather(logits, 1, (y.unsqueeze(1)).long()).squeeze())
+    correct_logit = torch.sum(torch.gather(logits, 1, (y.unsqueeze(1)).long()).squeeze())
     tmp1 = torch.argsort(logits, dim=1)[:, -2:]
     new_y = torch.where(tmp1[:, -1] == y, tmp1[:, -2], tmp1[:, -1])
-    wrong_logit = torch.sum(
-        torch.gather(logits, 1, (new_y.unsqueeze(1)).long()).squeeze())
-    loss = -F.relu(correct_logit - wrong_logit)
+    wrong_logit = torch.sum(torch.gather(logits, 1, (new_y.unsqueeze(1)).long()).squeeze())
+    loss = - F.relu(correct_logit-wrong_logit)
     return loss
 
 
 def margin_loss(logits, y):
     logit_org = logits.gather(1, y.view(-1, 1))
-    logit_target = logits.gather(
-        1,
-        (logits - torch.eye(10)[y].to('cuda') * 9999).argmax(1, keepdim=True))
+    logit_target = logits.gather(1, (logits - torch.eye(logits.shape[1])[y].to("cuda") * 9999).argmax(1, keepdim=True))
     loss = -logit_org + logit_target
     loss = torch.sum(loss)
     return loss
 
 
 class PGDAttack():
-
-    def __init__(self,
-                 epsilon=8. / 255.,
-                 num_steps=50,
-                 step_size=2. / 255.,
-                 num_restarts=1,
-                 v_min=0.,
-                 v_max=1.,
-                 num_classes=10,
-                 random_start=False,
-                 type='PGD',
-                 use_odi=False):
+    def __init__(self, model, epsilon=8./255., num_steps=50, step_size=2./255.,
+                 num_restarts=1, v_min=0., v_max=1., num_classes=10,
+                 random_start=False, type='PGD', use_odi=False):
+        self.model = model
         self.epsilon = epsilon
         self.num_steps = num_steps
         self.step_size = step_size
@@ -57,7 +47,8 @@ class PGDAttack():
         device = X.device
         return torch.FloatTensor(*X.shape).uniform_(-eps, eps).to(device)
 
-    def perturb(self, model, x_in, y_in):
+    def perturb(self, x_in, y_in):
+        model = self.model
         device = x_in.device
         epsilon = self.epsilon
         X_adv = x_in.detach().clone()
@@ -70,7 +61,7 @@ class PGDAttack():
                 X_pgd = Variable(X_pgd.data + random_noise, requires_grad=True)
 
             if self.use_odi:
-                out = model(x_in)
+                out = model(X_pgd)
                 rv = torch.FloatTensor(*out.shape).uniform_(-1., 1.).to(device)
 
             for i in range(self.num_steps):
@@ -92,27 +83,18 @@ class PGDAttack():
                 X_pgd = Variable(X_pgd.data + eta, requires_grad=True)
                 eta = torch.clamp(X_pgd.data - x_in.data, -epsilon, epsilon)
                 X_pgd = Variable(x_in.data + eta, requires_grad=True)
-                X_pgd = Variable(
-                    torch.clamp(X_pgd, 0, 1.0), requires_grad=True)
+                X_pgd = Variable(torch.clamp(X_pgd, 0, 1.0), requires_grad=True)
                 logits = self.model(X_pgd)
-                X_adv, nc = adv_check_and_update(X_pgd, logits, y_in, nc,
-                                                 X_adv)
+                X_adv, nc = adv_check_and_update(X_pgd, logits, y_in, nc, X_adv)
 
         return X_adv
 
 
 class MTPGDAttack():
-
-    def __init__(self,
-                 epsilon=8. / 255.,
-                 num_steps=50,
-                 step_size=2. / 255.,
-                 num_restarts=1,
-                 v_min=0.,
-                 v_max=1.,
-                 num_classes=10,
-                 random_start=False,
-                 use_odi=False):
+    def __init__(self, model, epsilon=8./255., num_steps=50, step_size=2./255.,
+                 num_restarts=1, v_min=0., v_max=1., num_classes=10,
+                 random_start=False, use_odi=False):
+        self.model = model
         self.epsilon = epsilon
         self.num_steps = num_steps
         self.step_size = step_size
@@ -128,7 +110,8 @@ class MTPGDAttack():
         device = X.device
         return torch.FloatTensor(*X.shape).uniform_(-eps, eps).to(device)
 
-    def perturb(self, model, x_in, y_in):
+    def perturb(self, x_in, y_in):
+        model = self.model
         device = x_in.device
         epsilon = self.epsilon
         X_adv = x_in.detach().clone()
@@ -144,8 +127,8 @@ class MTPGDAttack():
             for r in range(self.num_restarts):
                 if self.random_start:
                     random_noise = self._get_rand_noise(x_in)
-                    X_pgd = Variable(
-                        X_pgd.data + random_noise, requires_grad=True)
+                    X_pgd = Variable(X_pgd.data+random_noise,
+                                     requires_grad=True)
 
                 if self.use_odi:
                     out = model(x_in)
@@ -161,20 +144,18 @@ class MTPGDAttack():
                         z = model(X_pgd)
                         z_y = y_gt * z
                         z_t = y_tg * z
-                        loss = (-z_y + z_t).mean()
+                        loss = (-z_y+z_t).mean()
                     loss.backward()
                     if self.use_odi and i < 2:
                         eta = epsilon * X_pgd.grad.data.sign()
                     else:
                         eta = self.step_size * X_pgd.grad.data.sign()
                     X_pgd = Variable(X_pgd.data + eta, requires_grad=True)
-                    eta = torch.clamp(X_pgd.data - x_in.data, -epsilon,
-                                      epsilon)
+                    eta = torch.clamp(X_pgd.data - x_in.data, -epsilon, epsilon)
                     X_pgd = Variable(x_in.data + eta, requires_grad=True)
-                    X_pgd = Variable(
-                        torch.clamp(X_pgd, 0, 1.0), requires_grad=True)
+                    X_pgd = Variable(torch.clamp(X_pgd, 0, 1.0),
+                                     requires_grad=True)
                     logits = self.model(X_pgd)
-                    X_adv, nc = adv_check_and_update(X_pgd, logits, y_in, nc,
-                                                     X_adv)
+                    X_adv, nc = adv_check_and_update(X_pgd, logits, y_in, nc, X_adv)
 
         return X_adv
