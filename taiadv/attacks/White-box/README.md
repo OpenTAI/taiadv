@@ -1,51 +1,46 @@
 # WhiteBoxAttack
-一个可以用来测量模型鲁棒性的白盒攻击的框架
+A framework for measuring model robustness through white-box attacks
 
-## 目录
+## List
+- [Introduction](#Introduction)
+- [Attack Methods](#Attack-Methods)
+- [Usage](#Usage)
+- [References](#References)
 
-- [简介](#简介)
-- [攻击方法列表](#攻击方法列表)
-- [如何使用](#如何使用)
 
+## Introduction
 
-## 简介
+WhiteBoxAttack is a framework designed for conducting white-box attacks on machine learning models, especially neural networks. By accessing the internal structure and parameters of the model, it generates adversarial examples to test the robustness of the model.
 
-WhiteBoxAttack 是一个框架，用于对机器学习模型（尤其是神经网络）执行白盒攻击。通过访问模型的内部结构和参数，生成对抗样本以测试模型的鲁棒性。
+## Attack Methods
 
-## 攻击方法列表
-
-- 损失函数列表
+- Loss Function List
   
-|对抗攻击损失 |损失函数的形式|
-|:---------|:--------:|
-|Untargeted CE| |
-|Targeted CE| |
-|DLR| |
-|Margin| |
-|Probability Margin| |
+| Adversarial Attack Loss | Form of Loss Function |
+|:-----------------------:|:---------------------:|
+| Untargeted CE | |
+| Targeted CE | |
+| DLR | |
+| Margin | |
+| Probability Margin | |
 
-- 攻击方法列表
+- Attack Method List
   
-|策略 |损失函数 |备注|
-|:---------|:--------:|:--------:|
-|PGD| | |
-|APGD| | |
-|MD| | |
-|FAB| | |
-|PMA| | |
-|PMA+| | |
+| Strategy | Loss Function | Remarks |
+|:--------:|:-------------:|:-------:|
+| PGD | ce/cet/dlr/mg/pm/mi/alt | Single-target attack |
+| APGD | ce/cet/dlr/mg/pm/mi | Single-target attack |
+| APGDT | dlr/mg/pm | Single-target attack, multi-objective attack |
+| MD | mg | Single-target attack |
+| FAB | - | Single-target attack |
+| PMA | pm | Single-target attack |
+| PMA+ | - | Combined attack, PMA+APGDT |
 
-## 如何使用
+## Usage
 
-### 安装
+### Installation
 ```bash
 git clone https://github.com/yourusername/whiteboxattack.git
 ```
-
-### 例子
-
-### 其他版本
-
-## 引用
 
 
