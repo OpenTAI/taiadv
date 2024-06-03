@@ -20,10 +20,6 @@ def Dlr_loss(x, y):
     return -(x[u, y] - x_sorted[:, -2] * ind - x_sorted[:, -1] * (
         1. - ind)) / (x_sorted[:, -1] - x_sorted[:, -3] + 1e-12)
 
-def Dlr_loss_t(x, y, y_target):
-    x_sorted, ind_sorted = x.sort(dim=1)
-    return -(x[np.arange(x.shape[0]), y] - x[np.arange(x.shape[0]), y_target]) / (x_sorted[:, -1] - .5 * x_sorted[:, -3] - .5 * x_sorted[:, -4] + 1e-12)
-
 def Margin_loss(logits, y, num_classes):
     logit_org = logits.gather(1, y.view(-1, 1))
     logit_target = logits.gather(1, (logits - torch.eye(num_classes)[y.to("cpu")].to("cuda") * 9999).argmax(1, keepdim=True))
@@ -31,7 +27,7 @@ def Margin_loss(logits, y, num_classes):
     loss = torch.sum(loss)
     return loss
 
-def Softmax_Margin(logits, y, num_classes):
+def Probability_Margin(logits, y, num_classes):
     logits = F.softmax(logits,dim=-1) #softmax
     logit_org = logits.gather(1, y.view(-1, 1))
     logit_target = logits.gather(1, (logits - torch.eye(num_classes)[y.to("cpu")].to("cuda") * 9999).argmax(1, keepdim=True))
@@ -55,48 +51,18 @@ def MIFPE(logits,y):
     loss = F.cross_entropy(logits, y)
     return loss
 
-def AltPGD(logits,y,e,epochs,num_classes):
+def Alt_Loss(logits,y,e,epochs,num_classes):
     if e<epochs/3:
         return F.cross_entropy(logits,y)
     elif e<epochs/3*2:
         return Dlr_loss(logits,y).sum()
     else:
         return Margin_loss(logits,y,num_classes)
-    
-def Alt_DCM(logits,y,e,epochs,num_classes):
-    if e<epochs/3:
-        return F.cross_entropy(logits,y)
-    elif e<epochs/3*2:
-        logit_y = torch.eye(num_classes)[y.to("cpu")].to("cuda")*logits*1e8
-        target = (logits - logit_y).argmax(dim=-1)
-        return -F.cross_entropy(logits,target)
-    else:
-        return Margin_loss(logits,y,num_classes)
-    
-
-def Alt_DCM_MI(logits,y,e,epochs,num_classes):
-    if e<epochs/3:
-        return MIFPE(logits,y)
-    elif e<epochs/3*2:
-        logit_y = torch.eye(num_classes)[y.to("cpu")].to("cuda")*logits*1e8
-        target = (logits - logit_y).argmax(dim=-1)
-        return -MIFPE(logits,target)
-    else:
-        return Margin_loss(logits,y,num_classes)
-
-def AltPGD_MIFPE(logits,y,e,epochs,num_classes):
-    if e<epochs/3:
-        return MIFPE(logits,y)
-    elif e<epochs/3*2:
-        return Dlr_loss(logits,y).sum()
-    else:
-        return Margin_loss(logits,y,num_classes)
-
 
 class PGDAttack():
     def __init__(self, model, epsilon=8./255., num_steps=50, step_size=2./255.,
                  num_restarts=1, v_min=0., v_max=1., num_classes=10,
-                 random_start=False, loss_type='CE',decay_step='cos', use_odi=False):
+                 random_start=False, loss_type='ce',decay_step='cos', use_odi=False):
         self.model = model
         self.epsilon = epsilon
         self.num_steps = num_steps
@@ -155,30 +121,24 @@ class PGDAttack():
                 logit = model(x_pgd)
                 if self.use_odi and i < 2:
                     loss = (logit * rv).sum()
-                elif self.loss_type == 'CE':
+                elif self.loss_type == 'ce':
                     loss = F.cross_entropy(logit,y)
                 ####
-                elif self.loss_type == 'CE_T':
+                elif self.loss_type == 'cet':
                     logit_y = torch.eye(self.num_classes)[y.to("cpu")].to("cuda")*logit*1e8
                     target = (logit - logit_y).argmax(dim=-1)
                     loss = -F.cross_entropy(logit,target)
-                elif self.loss_type == 'Dlr':
+                elif self.loss_type == 'dlr':
                     loss = Dlr_loss(logit,y).sum()
-                elif self.loss_type == 'Margin':
+                elif self.loss_type == 'mg':
                     loss = Margin_loss(logit,y,self.num_classes)
-                elif self.loss_type == 'SFM':
-                    loss = Softmax_Margin(logit,y,self.num_classes)
-                elif self.loss_type == 'AltPGD':
-                    loss = AltPGD(logit,y,i,self.num_steps,self.num_classes)
-                elif self.loss_type == 'AltPGD_MI':
-                    loss = AltPGD_MIFPE(logit,y,i,self.num_steps,self.num_classes)
-                elif self.loss_type == 'Alt_DCM':
-                    loss = Alt_DCM(logit,y,i,self.num_steps,self.num_classes)
-                elif self.loss_type == 'Alt_DCM_MI':
-                    loss = Alt_DCM_MI(logit,y,i,self.num_steps,self.num_classes)
-                elif self.loss_type == 'MIFPE':
+                elif self.loss_type == 'pm':
+                    loss = Probability_Margin(logit,y,self.num_classes)
+                elif self.loss_type == 'alt':
+                    loss = Alt_Loss(logit,y,i,self.num_steps,self.num_classes)
+                elif self.loss_type == 'mi':
                     loss = MIFPE(logit,y)
-                elif self.loss_type == 'MIFPE_T':
+                elif self.loss_type == 'mi_t':
                     logit_y = torch.eye(self.num_classes)[y.to("cpu")].to("cuda")*logit*1e8
                     target = (logit - logit_y).argmax(dim=-1)
                     loss = -MIFPE(logit,target)
