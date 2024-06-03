@@ -1,5 +1,4 @@
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 from torch.autograd import Variable
@@ -16,7 +15,6 @@ class MDAttack():
         self.num_random_starts = num_random_starts
         self.v_min = v_min
         self.v_max = v_max
-        self.first_step_size = first_step_size
         self.seed = seed
         self.norm = norm
         self.num_classes = num_classes
