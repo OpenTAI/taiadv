@@ -5,6 +5,19 @@ import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
 
+class Dataset_Processor(name,path):
+    if name == 'CIFAR10':
+        pass
+    elif name == 'CIFAR100':
+        pass
+    elif name == 'ImageNet':
+        pass
+    elif name == 'CC1M':
+        dateset = CC1M(name)
+        
+def CC1M_processor(path):
+    pass
+
 class CC1M(Dataset):
     def __init__(self, root, transform=None, target_transform=None, tokenizer=None, **kwargs):
                 
@@ -25,7 +38,6 @@ class CC1M(Dataset):
         else:
             self.get_idx = False 
 
-            
     def __len__(self):
         return len(self.file_list)
     
