@@ -6,6 +6,7 @@ We propose a novel attack method called Probability Margin Attack (PMA) that int
 
 - Loss Function List
 
+<img src="loss.jpg" width="500" height="200">
 
 | Adversarial Attack Loss | Form of Loss Function |
 |:-----------------------|:---------------------|
