@@ -1,21 +1,12 @@
-# WhiteBoxAttack
-A framework for measuring model robustness through white-box attacks
+# PMA
+"Probability Margin Attack: A Stronger Baseline for White-box Adversarial Robustness Evaluation"
 
-## List
-- [Introduction](#Introduction)
-- [Attack Methods](#Attack-Methods)
-- [Usage](#Usage)
-- [References](#References)
+We propose a novel attack method called Probability Margin Attack (PMA) that introduces a probability margin loss.
 
-
-## Introduction
-
-WhiteBoxAttack is a framework designed for conducting white-box attacks on machine learning models, especially neural networks. By accessing the internal structure and parameters of the model, it generates adversarial examples to test the robustness of the model.
-
-## Attack Methods
 
 - Loss Function List
-  
+
+
 | Adversarial Attack Loss | Form of Loss Function |
 |:-----------------------|:---------------------|
 | Untargeted CE | |
@@ -42,5 +33,8 @@ WhiteBoxAttack is a framework designed for conducting white-box attacks on machi
 ```bash
 git clone https://github.com/yourusername/whiteboxattack.git
 ```
+
+### Example
+
 
 
