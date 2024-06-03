@@ -1,14 +1,6 @@
 import numpy as np
 import time
 import torch
-#import scipy.io
-
-#import numpy.linalg as nl
-
-#
-import os
-import sys
-
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -45,12 +37,12 @@ class APGDAttack_targeted():
 
         return -(x[np.arange(x.shape[0]), y] - x[np.arange(x.shape[0]), y_target]) / (x_sorted[:, -1] - .5 * x_sorted[:, -3] - .5 * x_sorted[:, -4] + 1e-12)
 
-    def margin_loss_targeted(self,x,y,y_target):
+    def mg_loss_targeted(self,x,y,y_target):
         zmax = x.gather(1,y_target.view(-1,1))
         zy = x.gather(1,y.view(-1,1))
         return (zmax-zy).squeeze()
     
-    def sfm_loss_targeted(self, x, y, y_target):
+    def pm_loss_targeted(self, x, y, y_target):
         x = torch.softmax(x,dim=-1)
         zmax = x.gather(1,y_target.view(-1,1))
         zy = x.gather(1,y.view(-1,1))
@@ -85,12 +77,12 @@ class APGDAttack_targeted():
         for _ in range(self.eot_iter):
             with torch.enable_grad():
                 logits = self.model(x_adv)  # 1 forward pass (eot_iter = 1)
-                if self.loss == 'Dlr':
+                if self.loss == 'dlr':
                     loss_indiv = self.dlr_loss_targeted(logits, y, y_target)
-                elif self.loss == 'Margin':
-                    loss_indiv = self.margin_loss_targeted(logits, y, y_target)
-                elif self.loss == 'SFM':
-                    loss_indiv = self.sfm_loss_targeted(logits, y, y_target)
+                elif self.loss == 'mg':
+                    loss_indiv = self.mg_loss_targeted(logits, y, y_target)
+                elif self.loss == 'pm':
+                    loss_indiv = self.pm_loss_targeted(logits, y, y_target)
                 loss = loss_indiv.sum()
 
             grad += torch.autograd.grad(loss, [x_adv])[0].detach()  # 1 backward pass (eot_iter = 1)
@@ -143,12 +135,12 @@ class APGDAttack_targeted():
             for _ in range(self.eot_iter):
                 with torch.enable_grad():
                     logits = self.model(x_adv)  # 1 forward pass (eot_iter = 1)
-                    if self.loss == 'Dlr':
+                    if self.loss == 'dlr':
                         loss_indiv = self.dlr_loss_targeted(logits, y, y_target)
-                    elif self.loss == 'Margin':
-                        loss_indiv = self.margin_loss_targeted(logits, y, y_target)
-                    elif self.loss == 'SFM':
-                        loss_indiv = self.sfm_loss_targeted(logits, y, y_target)
+                    elif self.loss == 'mg':
+                        loss_indiv = self.mg_loss_targeted(logits, y, y_target)
+                    elif self.loss == 'pm':
+                        loss_indiv = self.pm_loss_targeted(logits, y, y_target)
                     loss = loss_indiv.sum()
 
                 grad += torch.autograd.grad(loss, [x_adv])[0].detach()  # 1 backward pass (eot_iter = 1)
