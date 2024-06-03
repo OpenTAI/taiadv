@@ -1,20 +1,21 @@
-# PMA
-"Probability Margin Attack: A Stronger Baseline for White-box Adversarial Robustness Evaluation"
+## Introduction
+This is a white-box attack toolkit that can be used to measure the robustness of deep neural network models.
 
-We propose a novel attack method called Probability Margin Attack (PMA) that introduces a probability margin loss.
+Our key contributions are:
+- **"Imbalanced Gradients: A Subtle Cause of Overestimated Adversarial Robustness"**
+
+We identify a new type of effect called imbalanced gradients, which can cause overestimated adversarial robustness and cannot be detected by detection methods for obfuscated gradients. And we propose Margin Decomposition (MD) attacks to exploit imbalanced gradients.
+
+- **"Probability Margin Attack: A Stronger Baseline for White-box Adversarial Robustness Evaluation"**
+
+We propose a novel attack method called Probability Margin Attack (PMA) that introduces a probability margin loss(PM).
 
 
+## Related Work
+我们总结了白盒攻击中常用的损失函数和攻击策略
 - Loss Function List
 
-<img src="loss.jpg" width="500" height="200">
-
-| Adversarial Attack Loss | Form of Loss Function |
-|:-----------------------|:---------------------|
-| Untargeted CE | |
-| Targeted CE | |
-| DLR | |
-| Margin | |
-| Probability Margin | |
+<img src="loss.jpg" width="400" height="150">
 
 - Attack Method List
   
@@ -27,6 +28,8 @@ We propose a novel attack method called Probability Margin Attack (PMA) that int
 | FAB | - | Single-target attack, untargeted attack |
 | PMA | pm | Single-target attack, untargeted attack |
 | PMA+ | - | Ensemble attacks, PMA+APGDT |
+
+
 
 ## Usage
 
