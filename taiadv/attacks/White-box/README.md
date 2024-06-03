@@ -17,7 +17,7 @@ WhiteBoxAttack is a framework designed for conducting white-box attacks on machi
 - Loss Function List
   
 | Adversarial Attack Loss | Form of Loss Function |
-|:-----------------------:|:---------------------:|
+|:-----------------------|:---------------------|
 | Untargeted CE | |
 | Targeted CE | |
 | DLR | |
@@ -27,14 +27,14 @@ WhiteBoxAttack is a framework designed for conducting white-box attacks on machi
 - Attack Method List
   
 | Strategy | Loss Function | Remarks |
-|:--------:|:-------------:|:-------:|
-| PGD | ce/cet/dlr/mg/pm/mi/alt | Single-target attack |
-| APGD | ce/cet/dlr/mg/pm/mi | Single-target attack |
+|:--------|:-------------|:-------|
+| PGD | ce/cet/dlr/mg/pm/mi/alt | Single attack, untargeted attack |
+| APGD | ce/cet/dlr/mg/pm/mi | Single attack, untargeted attack |
 | APGDT | dlr/mg/pm | Single-target attack, multi-objective attack |
-| MD | mg | Single-target attack |
-| FAB | - | Single-target attack |
-| PMA | pm | Single-target attack |
-| PMA+ | - | Combined attack, PMA+APGDT |
+| MD | mg | Single-target attack, untargeted attack |
+| FAB | - | Single-target attack, untargeted attack |
+| PMA | pm | Single-target attack, untargeted attack |
+| PMA+ | - | Ensemble attacks, PMA+APGDT |
 
 ## Usage
 
