@@ -1,14 +1,6 @@
 import numpy as np
 import time
 import torch
-#import scipy.io
-
-#import numpy.linalg as nl
-
-#
-import os
-import sys
-
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -18,7 +10,7 @@ def Margin_loss(logits, y):
     loss = -logit_org + logit_target
     return loss.squeeze()
 
-def Softmax_Margin(logits, y):
+def Probability_margin(logits, y):
     logits = F.softmax(logits,dim=-1)
     logit_org = logits.gather(1, y.view(-1, 1))
     logit_target = logits.gather(1, (logits - torch.eye(logits.shape[-1])[y.to("cpu")].to("cuda") * 9999).argmax(1, keepdim=True))
@@ -28,8 +20,7 @@ def Softmax_Margin(logits, y):
 
 class APGDAttack():
     def __init__(self, model, n_iter=100, norm='Linf', n_restarts=1, eps=None,
-                 seed=0, loss='CE', eot_iter=1, rho=.75, verbose=False,
-                 device='cuda'):
+                 seed=0, loss='CE', eot_iter=1, rho=.75, verbose=False):
         self.model = model
         self.n_iter = n_iter
         self.eps = eps
@@ -40,7 +31,7 @@ class APGDAttack():
         self.eot_iter = eot_iter
         self.thr_decr = rho
         self.verbose = verbose
-        self.device = device
+        device = device
         self.t = 1.
 
     def check_oscillation(self, x, j, k, y5, k3=0.75):
@@ -69,12 +60,14 @@ class APGDAttack():
         scale_list = torch.unsqueeze(scale_list, -1)
         return scale_list
 
-    def CE_MI(self,logit,y):
+    def MIFPE(self,logit,y):
         scale_output = self.get_output_scale(logit.clone().detach())
         logit = logit/scale_output
         return F.cross_entropy(logit,y,reduce=False, reduction='none')
         
     def attack_single_run(self, x_in, y_in):
+        device = x_in.device
+        
         x = x_in.clone() if len(x_in.shape) == 4 else x_in.clone().unsqueeze(0)
         y = y_in.clone() if len(y_in.shape) == 1 else y_in.clone().unsqueeze(0)
 
@@ -83,11 +76,11 @@ class APGDAttack():
             print('parameters: ', self.n_iter, self.n_iter_2, self.n_iter_min, self.size_decr)
 
         if self.norm == 'Linf':
-            t = 2 * torch.rand(x.shape).to(self.device).detach() - 1
-            x_adv = x.detach() + self.eps * torch.ones([x.shape[0], 1, 1, 1]).to(self.device).detach() * t / (t.reshape([t.shape[0], -1]).abs().max(dim=1, keepdim=True)[0].reshape([-1, 1, 1, 1]))
+            t = 2 * torch.rand(x.shape).to(device).detach() - 1
+            x_adv = x.detach() + self.eps * torch.ones([x.shape[0], 1, 1, 1]).to(device).detach() * t / (t.reshape([t.shape[0], -1]).abs().max(dim=1, keepdim=True)[0].reshape([-1, 1, 1, 1]))
         elif self.norm == 'L2':
-            t = torch.randn(x.shape).to(self.device).detach()
-            x_adv = x.detach() + self.eps * torch.ones([x.shape[0], 1, 1, 1]).to(self.device).detach() * t / ((t ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt() + 1e-12)
+            t = torch.randn(x.shape).to(device).detach()
+            x_adv = x.detach() + self.eps * torch.ones([x.shape[0], 1, 1, 1]).to(device).detach() * t / ((t ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt() + 1e-12)
         x_adv = x_adv.clamp(0., 1.)
         x_best = x_adv.clone()
         x_best_adv = x_adv.clone()
@@ -95,16 +88,16 @@ class APGDAttack():
         loss_best_steps = torch.zeros([self.n_iter + 1, x.shape[0]])
         acc_steps = torch.zeros_like(loss_best_steps)
 
-        if self.loss == 'CE':
+        if self.loss == 'ce':
             criterion_indiv = nn.CrossEntropyLoss(reduce=False, reduction='none')
-        elif self.loss == 'Dlr':
+        elif self.loss == 'dlr':
             criterion_indiv = self.dlr_loss
-        elif self.loss == 'Margin':
+        elif self.loss == 'mg':
             criterion_indiv = Margin_loss
-        elif self.loss == 'SFM':
-            criterion_indiv = Softmax_Margin
-        elif self.loss == 'MIFPE':
-            criterion_indiv = self.CE_MI
+        elif self.loss == 'pm':
+            criterion_indiv = Probability_margin
+        elif self.loss == 'mi':
+            criterion_indiv = self.MIFPE
         else:
             raise ValueError('unknowkn loss')
 
@@ -125,7 +118,7 @@ class APGDAttack():
         acc_steps[0] = acc + 0
         loss_best = loss_indiv.detach().clone()
 
-        step_size = self.eps * torch.ones([x.shape[0], 1, 1, 1]).to(self.device).detach() * torch.Tensor([2.0]).to(self.device).detach().reshape([1, 1, 1, 1])
+        step_size = self.eps * torch.ones([x.shape[0], 1, 1, 1]).to(device).detach() * torch.Tensor([2.0]).to(device).detach().reshape([1, 1, 1, 1])
         x_adv_old = x_adv.clone()
         counter = 0
         k = self.n_iter_2 + 0
@@ -153,10 +146,10 @@ class APGDAttack():
                 elif self.norm == 'L2':
                     x_adv_1 = x_adv + step_size * grad / ((grad ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt() + 1e-12)
                     x_adv_1 = torch.clamp(x + (x_adv_1 - x) / (((x_adv_1 - x) ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt() + 1e-12) * torch.min(
-                        self.eps * torch.ones(x.shape).to(self.device).detach(), ((x_adv_1 - x) ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt()), 0.0, 1.0)
+                        self.eps * torch.ones(x.shape).to(device).detach(), ((x_adv_1 - x) ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt()), 0.0, 1.0)
                     x_adv_1 = x_adv + (x_adv_1 - x_adv) * a + grad2 * (1 - a)
                     x_adv_1 = torch.clamp(x + (x_adv_1 - x) / (((x_adv_1 - x) ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt() + 1e-12) * torch.min(
-                        self.eps * torch.ones(x.shape).to(self.device).detach(), ((x_adv_1 - x) ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt() + 1e-12), 0.0, 1.0)
+                        self.eps * torch.ones(x.shape).to(device).detach(), ((x_adv_1 - x) ** 2).sum(dim=(1, 2, 3), keepdim=True).sqrt() + 1e-12), 0.0, 1.0)
 
                 x_adv = x_adv_1 + 0.
 
