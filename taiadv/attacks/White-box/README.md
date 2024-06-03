@@ -29,13 +29,13 @@ We propose a novel attack method called Probability Margin Attack (PMA) that int
 | PMA | pm | Single-target attack, untargeted attack |
 | PMA+ | - | Ensemble attacks, PMA+APGDT |
 
-
+taiadv/attacks/White-box
 
 ## Usage
 
 ### Installation
 ```bash
-git clone https://github.com/yourusername/whiteboxattack.git
+git clone https://github.com/taiadv/taiadv/attacks/White-box.git
 ```
 
 ### Example
