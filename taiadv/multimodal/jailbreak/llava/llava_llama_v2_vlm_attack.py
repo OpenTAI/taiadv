@@ -77,7 +77,7 @@ print('device = ', model.device)
 
 my_attacker = vlm_attacker.Attacker(args, model, tokenizer, queries, targets, device=model.device, image_processor=image_processor)
 
-template_img = 'results_llava_llama_v2_unconstrained_pre/bad_prompt.bmp'
+template_img = 'harmful_corpus/bad_prompt.bmp'
 image = load_image(template_img)
 image = image_processor.preprocess(image, return_tensors='pt')['pixel_values'].cuda()
 print(image.shape)
