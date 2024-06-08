@@ -41,7 +41,8 @@ def main():
     model = model.to(device)
     model.eval()
 
-    x_test,y_test = Dataset_Processor(self.dataset,self.datapath)
+    data = Dataset_Processor(self.dataset,self.datapath)
+    
     
     for param in model.parameters():
         param.requires_grad = False
