@@ -7,7 +7,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 from torch.autograd import Variable
-from .utils import adv_check_and_update, one_hot_tensor
 import torch.optim as optim
 
 torch.manual_seed(0)
@@ -74,6 +73,7 @@ class PGDAttack():
         self.loss_type = loss_type
         self.decay_step = decay_step
         self.use_odi = use_odi
+        self.step_size = step_size
 
     def _get_rand_noise(self, X):
         eps = self.epsilon
@@ -115,7 +115,7 @@ class PGDAttack():
                 elif self.decay_step == 'cos':
                     step_size = step_size_begin * math.cos(i / self.num_steps * math.pi * 0.5)
                 else:
-                    pass
+                    step_size = self.step_size
                 
                 #optimizer.zero_grad()
                 logit = model(x_pgd)
