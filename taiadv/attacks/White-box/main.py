@@ -101,7 +101,6 @@ def main():
     util.build_dirs(args.result_path)
     filename = '%s.json' % (args.attack_type)
     filename = os.path.join(args.result_path, filename)
-    print(filename)
     util.save_json(payload, filename)
     return
 
