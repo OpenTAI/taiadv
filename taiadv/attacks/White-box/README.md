@@ -54,9 +54,6 @@ python main.py --dataset <dataset_name> --datapath <dataset_dir> --model <model_
 python -m torch.distributed.launch --nproc_per_node=<NUM_GPUS> main.py --dataset <dataset_name> --datapath <dataset_dir> --model <model_path> --eps 8 --bs <batchsize> --attack_type <PMA> --loss_f <pm> --num_steps 100 --num_classes <num_classes>
 ```
 
-### Example
-
-
 ### Citation
 ```bash
 @article{madry2017towards,
