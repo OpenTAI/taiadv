@@ -31,7 +31,6 @@ class APGDAttack():
         self.eot_iter = eot_iter
         self.thr_decr = rho
         self.verbose = verbose
-        device = device
         self.t = 1.
 
     def check_oscillation(self, x, j, k, y5, k3=0.75):
