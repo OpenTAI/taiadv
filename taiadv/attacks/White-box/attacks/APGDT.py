@@ -83,6 +83,8 @@ class APGDAttack_targeted():
                     loss_indiv = self.mg_loss_targeted(logits, y, y_target)
                 elif self.loss == 'pm':
                     loss_indiv = self.pm_loss_targeted(logits, y, y_target)
+                else:
+                    raise("loss error")
                 loss = loss_indiv.sum()
 
             grad += torch.autograd.grad(loss, [x_adv])[0].detach()  # 1 backward pass (eot_iter = 1)
