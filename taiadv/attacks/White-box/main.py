@@ -79,7 +79,7 @@ def main():
             x_adv,adv_acc = a.perturb(x,y)
             accs[index] = adv_acc
             #x_adv[index] = x_adv.cpu()
-        adv_total += (accs==0).sum().item()
+        adv_total += accs.sum().item()
         print(("Clean:%d/%d Clean Acc: %.2f Adv: %d/%d Adv_Acc: %.2f")%(clean_total,total,clean_total/total*100,adv_total,total,adv_total/total*100))
             
     clean_accuracy, robust_accuracy = round(clean_total/total*100,2), round(adv_total/total*100,2)
