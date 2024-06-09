@@ -8,7 +8,7 @@ torch.manual_seed(0)
 
 class MDAttack():
     def __init__(self, model, epsilon=8./255., num_steps=50,num_random_starts=1, v_min=0., 
-                 v_max=1.,seed=0, norm='Linf', num_classes=100,loss_fn='margin'):
+                 v_max=1.,seed=0, norm='Linf', num_classes=100,loss_fn='margin',use_odi=False):
         self.model = model
         self.epsilon = epsilon
         self.num_steps = num_steps
@@ -20,6 +20,7 @@ class MDAttack():
         self.num_classes = num_classes
         self.loss_fn = loss_fn
         self.initial_step_size = 2.0 * epsilon
+        self.use_odi = use_odi
 
     def perturb(self, x_in, y_in):
         #K'
