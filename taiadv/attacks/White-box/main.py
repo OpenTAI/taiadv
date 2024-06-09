@@ -82,10 +82,10 @@ def main():
         adv_total += (accs==0).sum().item()
         print(("Clean:%d/%d Clean Acc: %.2f Adv: %d/%d Adv_Acc: %.2f")%(clean_total,total,clean_total/total*100,adv_total,total,adv_total/total*100))
             
-    clean_accuracy, robust_accuracy = clean_total/total*100, adv_total/total*100
+    clean_accuracy, robust_accuracy = round(clean_total/total*100,2), round(adv_total/total*100,2)
 
-    print(f"clean_accuracy:{clean_accuracy*100:.2f}")
-    print(f"robust_accuracy:{robust_accuracy*100:.2f}")
+    print(f"clean_accuracy:{clean_accuracy}")
+    print(f"robust_accuracy:{robust_accuracy}")
     end = time.time()
     cost = end - start
     print(f"cost:{cost}")
@@ -101,6 +101,7 @@ def main():
     util.build_dirs(args.result_path)
     filename = '%s.json' % (args.attack_type)
     filename = os.path.join(args.result_path, filename)
+    print(filename)
     util.save_json(payload, filename)
     return
 
