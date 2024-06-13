@@ -45,14 +45,11 @@ $z_{max}$ / $p_{max}$ is the maximum value of $z_i$ / $p_i$ for $i &ne; y$, resp
 git clone https://github.com/taiadv/taiadv/attacks/White-box.git
 ```
 
-### Single-GPU operation
+### Operation
 ```bash
 python main.py --dataset <dataset_name> --datapath <dataset_dir> --model <model_path> --eps 8 --bs <batchsize> --attack_type <PMA> --loss_f <pm> --num_steps 100 --num_classes <num_classes>
 ```
-### Multi-GPU parallelism
-```bash
-python -m torch.distributed.launch --nproc_per_node=<NUM_GPUS> main.py --dataset <dataset_name> --datapath <dataset_dir> --model <model_path> --eps 8 --bs <batchsize> --attack_type <PMA> --loss_f <pm> --num_steps 100 --num_classes <num_classes>
-```
+
 
 ### Citation
 ```bash
