@@ -1,6 +1,7 @@
 from .utils import transform_options, dataset_options
 from torch.utils.data import DataLoader
 from torchvision import transforms
+import torch
 
 
 class DatasetGenerator():
@@ -21,8 +22,14 @@ class DatasetGenerator():
                                                      True, kwargs)
         self.test_set_length = len(self.test_set)
 
-    def get_loader(self, train_shuffle=True):
-        test_loader = DataLoader(dataset=self.test_set, pin_memory=True,
+    def get_loader(self, is_sampler, world_size=None, rank=None):
+        if is_sampler:
+            sampler = torch.utils.data.distributed.DistributedSampler(self.test_set, num_replicas=world_size, rank=rank)
+            test_loader = DataLoader(dataset=self.test_set, pin_memory=True,
+                                 batch_size=self.eval_bs, drop_last=False,
+                                 num_workers=self.n_workers, shuffle=False,sampler=sampler)
+        else:
+            test_loader = DataLoader(dataset=self.test_set, pin_memory=True,
                                  batch_size=self.eval_bs, drop_last=False,
                                  num_workers=self.n_workers, shuffle=False)
         return test_loader
