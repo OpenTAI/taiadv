@@ -65,7 +65,7 @@ class Attacker:
             batch_queries=[t[0] for t in batch_queries_targets]#list of str
             batch_targets = [t[1] for t in batch_queries_targets]
             adv_split_start='<adv_split_start>'
-            separator = ' '+adv_split_start
+            separator = ' | '+adv_split_start
             adv_split_end = '</adv_split_end>'
             text_prompts = [text_prompt % (batch_queries[i]+separator+adv_suffix+adv_split_end) for i in range(batch_size)]
 
