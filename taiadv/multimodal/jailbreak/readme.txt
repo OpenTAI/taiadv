@@ -1,5 +1,3 @@
-# EOD
-
 Code for Multimodal Jailbreak
 
 
