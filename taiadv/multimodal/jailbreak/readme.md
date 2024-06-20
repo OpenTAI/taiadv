@@ -12,3 +12,19 @@ The fundamental setup tasks (e.g., environment setup and pretrained weights prep
 ```bash
 python minigpt_vlm_attack.py --cfg-path eval_configs/minigpt4_eval.yaml  --gpu-id 0 --n_iters 5000  --alpha 1 --save_dir vlm_unconstrained
 ```
+
+### Evaluation
+
+#### Evaluation on VAJM test set
+```bash
+python minigpt_test_manual_prompts_vlm.py --cfg-path eval_configs/minigpt4_eval.yaml  --gpu-id 0 --image_path  vlm_unconstrained/bad_prompt.bmp
+```
+#### Evaluation on Advbench
+```bash
+python minigpt_test_advbench.py --cfg-path eval_configs/minigpt4_eval.yaml  --gpu-id 0 --image_path  vlm_unconstrained/bad_prompt.bmp
+```
+
+### Attack on LLaVA
+```bash
+python -u llava_llama_v2_vlm_attack.py --n_iters 5000 --save_dir results_llava_llama_v2_unconstrained --alpha 1
+```
