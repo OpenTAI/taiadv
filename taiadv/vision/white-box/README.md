@@ -53,7 +53,9 @@ https://github.com/fra31/auto-attack.git
 
 
 ### 运行
+```bash
+python main.py --dataset <dataset_name> --datapath <dataset_dir> --model <model_path> --eps 8 --bs <batchsize> --attack_type <PMA> --loss_f <pm> --num_steps 100 --num_classes <num_classes>
+```
 
 
-### 例子
 
