@@ -1,8 +1,9 @@
 # 简介
-本项目是一个白盒攻击的开源工具箱，支持现阶段多个白盒攻击方法的评测。
+本项目是一个白盒攻击视觉模型的开源工具箱，支持现阶段多个白盒攻击方法的评测。
 
 ## 亮点
-#### 提出了新的攻击方法PMA（Probability Margin Attack）和新的损失函数PM（Probability Margin Loss）
+#### 增加了更强的单体攻击方法PMA，更高效的组合攻击方法PMA+
+我们提出了新的攻击方法PMA（Probability Margin Attack），使用了新提出的损失函数PM（Probability Margin Loss），并提出了更高效的组合攻击方法PMA+
 
 
 #### 对抗攻击方法比较全面，支持更灵活的使用
@@ -22,8 +23,8 @@
 |PGD_alt|“Alternating Objectives Generates Stronger PGD-Based Adversarial Attacks”|
 |PGD_mi|“Efficient loss function by minimizing the detrimental effect of floating-point errors on gradient-based attacks”|
 
-#### 数据量更大，支持百万级别鲁棒性评估
-我们提供了基于cc3m构造的百万级别数据集cc1m，通过大量样本的评测更准确的评估模型的鲁棒性。
+#### 支持更多的数据集，还支持百万级别鲁棒性评估
+我们提供了CIFAR10，CIFAR100，ImageNet的数据处理和评测，除此之外，我们提供了基于cc3m构造的百万级别数据集cc1m，通过百万样本的评测得到更准确的模型鲁棒性。
 
 # 教程
 ## 安装
