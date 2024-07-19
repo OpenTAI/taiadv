@@ -10,18 +10,7 @@
 - 在单攻击评测中，支持不同策略和损失函数的组合；
 - 多攻击评测中，支持不同攻击方法的组合。
 
-|攻击方法|论文名称|
-|----|----|
-|PGD|“Towards deep learning models resistant to adversarial attacks”|
-|ODI|“Diversity can be transferred: Output diversification for white-and black-box attacks”|
-|PGD_mg|“Towards evaluating the robustness of neural networks”|
-|MT|“An alternative surrogate loss for pgd-based adversarial testing”|
-|APGD|“Reliable evaluation of adversarial robustness with an ensemble of diverse parameter-free attacks”|
-|APGDT|“Reliable evaluation of adversarial robustness with an ensemble of diverse parameter-free attacks”|
-|FAB|“Minimally distorted adversarial examples with a fast adaptive boundary attack”|
-|MD|“Imbalanced gradients: a subtle cause of overestimated adversarial robustness”|
-|PGD_alt|“Alternating Objectives Generates Stronger PGD-Based Adversarial Attacks”|
-|PGD_mi|“Efficient loss function by minimizing the detrimental effect of floating-point errors on gradient-based attacks”|
+
 
 #### 支持更多的数据集，还支持百万级别鲁棒性评估
 我们提供了CIFAR10，CIFAR100，ImageNet的数据处理和评测，除此之外，我们提供了基于cc3m构造的百万级别数据集cc1m，通过百万样本的评测得到更准确的模型鲁棒性。
@@ -58,5 +47,19 @@ https://github.com/fra31/auto-attack.git
 python main.py --dataset <dataset_name> --datapath <dataset_dir> --model <model_path> --eps 8 --bs <batchsize> --attack_type <PMA> --loss_f <pm> --num_steps 100 --num_classes <num_classes>
 ```
 
+# 致谢
+我们集成了一些经典的白盒攻击方法，包括不同的策略，具体如下：
 
+|攻击方法|论文名称|
+|----|----|
+|PGD|“Towards deep learning models resistant to adversarial attacks”|
+|ODI|“Diversity can be transferred: Output diversification for white-and black-box attacks”|
+|PGD_mg|“Towards evaluating the robustness of neural networks”|
+|MT|“An alternative surrogate loss for pgd-based adversarial testing”|
+|APGD|“Reliable evaluation of adversarial robustness with an ensemble of diverse parameter-free attacks”|
+|APGDT|“Reliable evaluation of adversarial robustness with an ensemble of diverse parameter-free attacks”|
+|FAB|“Minimally distorted adversarial examples with a fast adaptive boundary attack”|
+|MD|“Imbalanced gradients: a subtle cause of overestimated adversarial robustness”|
+|PGD_alt|“Alternating Objectives Generates Stronger PGD-Based Adversarial Attacks”|
+|PGD_mi|“Efficient loss function by minimizing the detrimental effect of floating-point errors on gradient-based attacks”|
 
