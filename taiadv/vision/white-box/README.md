@@ -1,56 +1,56 @@
-# 简介
-本项目是一个白盒攻击视觉模型的开源工具箱，支持现阶段多个白盒攻击方法的评测。
+# Introduction
+The project is an open-source toolbox for white-box attacks on visual models, supporting the evaluation of multiple white-box attack methods currently available.
 
-## 亮点
-#### 增加了更强的单体攻击方法PMA，更高效的组合攻击方法PMA+
-我们提出了新的攻击方法PMA（Probability Margin Attack），使用了新提出的损失函数PM（Probability Margin Loss），并提出了更高效的组合攻击方法PMA+
-
-
-#### 对抗攻击方法比较全面，支持更灵活的使用
-- 在单攻击评测中，支持不同策略和损失函数的组合；
-- 多攻击评测中，支持不同攻击方法的组合。
+## Highlights
+#### Enhanced Single Attack Method PMA and More Efficient Combined Attack Method PMA+
+We introduce a new attack method called PMA (Probability Margin Attack), which utilizes the newly proposed Probability Margin Loss function. Additionally, we present a more efficient combined attack method, PMA+.
 
 
+#### Comprehensive and Flexible Adversarial Attack Methods
+- For single attack evaluations, our toolbox supports combinations of different strategies and loss functions.
+- In multi-attack evaluations, it allows for the combination of various attack methods.
 
-#### 支持更多的数据集，还支持百万级别鲁棒性评估
-我们提供了CIFAR10，CIFAR100，ImageNet的数据处理和评测，除此之外，我们提供了基于cc3m构造的百万级别数据集cc1m，通过百万样本的评测得到更准确的模型鲁棒性。
 
-# 教程
-## 安装
+
+#### Expanded Dataset Support and Large-Scale Robustness Evaluation
+We provide data processing and evaluation tools for CIFAR10, CIFAR100, and ImageNet. Furthermore, we introduce a million-sample dataset, cc1m, constructed from cc3m, enabling more accurate model robustness assessments through large-scale evaluation.
+
+# Tutorial
+## Installation
 ```bash
 https://github.com/fra31/auto-attack.git
 ```
 
-## 使用
+## Usage
 
-### 参数设置
+### Parameter Settings
 
-|参数名称|参数含义|
-|----|----|
-|dataset|数据集名称（CIFAR10/CIFAR100/ImageNet/CC1M）|
-|datapath|数据集路径|
-|modelpath|模型路径|
-|eps|扰动范围（一般取4或8）|
-|bs|批量大小|
-|attack_type|攻击策略|
-|random_start|是否加入随机噪声（bool类型）|
-|num_restarts|重启的次数|
-|num_steps|攻击步数|
-|loss_f|损失函数的类型|
-|use_odi|是否使用ODI策略|
-|num_classes|模型分类数量|
-|result_path|结果保存的地方|
+| Parameter Name | Type |Description |
+| ---- | ---- | ----|
+| dataset | string  | Name of the dataset (CIFAR10/CIFAR100/ImageNet/CC1M) |
+| datapath | string | Path to the dataset |
+| modelpath | int | Path to the model |
+| eps | int | Perturbation range (commonly set to 4 or 8) |
+| bs | int  | Batch size |
+| attack_type | string | Attack strategy |
+| random_start | bool | Whether to add random noise (boolean) |
+| num_restarts | int | Number of restarts |
+| num_steps | int | Number of attack steps |
+| loss_f | string | Type of loss function |
+| use_odi | bool | Whether to use the ODI strategy |
+| num_classes | int | Number of classes in the model |
+| result_path | string | Path to save the results |
 
-
-### 运行
+### Execution
 ```bash
 python main.py --dataset <dataset_name> --datapath <dataset_dir> --model <model_path> --eps 8 --bs <batchsize> --attack_type <PMA> --loss_f <pm> --num_steps 100 --num_classes <num_classes>
 ```
 
-# 致谢
-我们集成了一些经典的白盒攻击方法，包括不同的策略，具体如下：
 
-|攻击方法|论文名称|
+# Acknowledgements
+We have integrated several classic white-box attack methods, incorporating various strategies, as detailed below:
+
+|Methods|Paper Title|
 |----|----|
 |PGD|“Towards deep learning models resistant to adversarial attacks”|
 |ODI|“Diversity can be transferred: Output diversification for white-and black-box attacks”|
